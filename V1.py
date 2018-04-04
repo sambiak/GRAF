@@ -40,22 +40,6 @@ class HMM():
             raise ValueError("nbl doit être strictement positif")
         self.__nbs = nbs
 
-    @staticmethod
-    def __ligns_not_comments(adr):
-        with open(adr, "r") as f:
-            for line in f:
-                if line[0] != "#":
-                    yield line
-
-    @staticmethod
-    def load(adr):
-        lines = HMM.__ligns_not_comments(adr)
-        nbl = int(next(lines))
-        nbs = int(next(lines))
-        initial = [int(next(lines)) for i in range(nbs)]
-        transitions = [[j for j in map(int, next(lines)).split()] for i in range(nbs)]
-        emmissions = [[j for j in map(int, next(lines)).split()] for i in range(nbl)]
-
     @property
     def initial(self):
         return self.__initial
@@ -108,3 +92,25 @@ class HMM():
             if e < 0:
                 raise ValueError("les probabilités doivent être positives")
         self.__emissions = emissions
+
+    @staticmethod
+    def __ligns_not_comments(adr):
+        """
+
+        :param adr: Adresse du fichier contenant la sauvegarde
+        :return: Un itérateur contenant les lignes du fichier moins les lignes
+        commencant par #
+        """
+        with open(adr, "r") as f:
+            for line in f:
+                if line[0] != "#":
+                    yield line
+
+    @staticmethod
+    def load(adr):
+        lines = HMM.__ligns_not_comments(adr)
+        nbl = int(next(lines))
+        nbs = int(next(lines))
+        initial = [int(next(lines)) for i in range(nbs)]
+        transitions = [[j for j in map(int, next(lines)).split()] for i in range(nbs)]
+        emmissions = [[j for j in map(int, next(lines)).split()] for i in range(nbl)]
