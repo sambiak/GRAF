@@ -5,10 +5,6 @@ class HMM():
     """ Define an HMM"""
 
     def __init__(self, nbl, nbs, initial, transitions, emissions):
-        if not isinstance(emissions, np.ndarray):
-            raise ValueError("emissions doit être un array numpy")
-        if np.shape(emissions) != (nbs, nbl):
-            raise ValueError("emissions n'a pas la bonne dimension")
         # The number of letters
         self.nbl = nbl
         # The number of states
@@ -68,3 +64,22 @@ class HMM():
             raise ValueError("transitions doit être un array numpy")
         if np.shape(transitions) != (self.nbs, self.nbs):
             raise ValueError("transitions n'a pas la bonne dimension")
+        for line in range(self.nbs):
+            if not np.isclose(np.array([transitions[line].np.sum()]), np.array([1.0])):
+                raise ValueError("la somme des probabilités de transition, ligne par ligne, doit être 1")
+        self.__transitions = transitions
+
+    @property
+    def emissions(self):
+        return self.__emissions
+
+    @emissions.setter
+    def emissions(self, emissions):
+        if not isinstance(emissions, np.ndarray):
+            raise ValueError("emissions doit être un array numpy")
+        if np.shape(emissions) != (self.nbs, self.nbl):
+            raise ValueError("emissions n'a pas la bonne dimension")
+        for line in range(self.nbs):
+            if not np.isclose(np.array([emissions[line].np.sum()]), np.array([1.0])):
+                raise ValueError("la somme des probabilités de transition, ligne par ligne, doit être 1")
+        self.__emissions = emissions
