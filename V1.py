@@ -40,6 +40,22 @@ class HMM():
             raise ValueError("nbl doit être strictement positif")
         self.__nbs = nbs
 
+    @staticmethod
+    def __ligns_not_comments(adr):
+        with open(adr, "r") as f:
+            for line in f:
+                if line[0] != "#":
+                    yield line
+
+    @staticmethod
+    def load(adr):
+        lines = HMM.__ligns_not_comments(adr)
+        nbl = int(next(lines))
+        nbs = int(next(lines))
+        initial = [int(next(lines)) for i in range(nbs)]
+        transitions = [[j for j in map(int, next(lines)).split()] for i in range(nbs)]
+        emmissions = [[j for j in map(int, next(lines)).split()] for i in range(nbl)]
+
     @property
     def initial(self):
         return self.__initial
