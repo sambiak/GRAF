@@ -96,7 +96,6 @@ class HMM():
     @staticmethod
     def __ligns_not_comments(adr):
         """
-
         :param adr: Adresse du fichier contenant la sauvegarde
         :return: Un itérateur contenant les lignes du fichier moins les lignes
         commencant par #
@@ -112,5 +111,5 @@ class HMM():
         nbl = int(next(lines))
         nbs = int(next(lines))
         initial = [int(next(lines)) for i in range(nbs)]
-        transitions = [[j for j in map(int, next(lines)).split()] for i in range(nbs)]
-        emmissions = [[j for j in map(int, next(lines)).split()] for i in range(nbl)]
+        transitions = [[j for j in map(int, next(lines).split())] for i in range(nbs)]
+        emmissions = [[j for j in map(int, next(lines).split())] for i in range(nbl)]
