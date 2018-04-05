@@ -157,6 +157,10 @@ class HMM():
         return O
 
     def pfw(self, w):
+        """
+        :param w: séquence générée par le HMM self
+        :return: la probabilité que self génère cette séquence
+        """
         n = len(w)
         F = []
         for k in range(self.nbs):
@@ -165,3 +169,19 @@ class HMM():
         for i in range(1, n):
             F = np.dot(F, self.transitions)*self.emissions[:, w[i]]
         return F.sum()
+
+    def pbw(self, w):
+        """
+
+        :param w: séquence générée par le HMM self
+        :return: la probabilité que self génère cette séquence
+        """
+        n = len(w)
+        B = []
+        for k in range(self.nbs):
+            B += [self.initial[k, w[n-1]]]
+        B = np.array(B)
+        for i in range(n-1, 0, -1):
+            B = np.dot(self.transitions, B)*self.emissions[:, w[i]]
+        B = B*self.initial*self.emissions[:, w[0]]
+        return B.sum()
