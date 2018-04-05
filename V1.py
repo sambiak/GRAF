@@ -49,9 +49,12 @@ class HMM():
     def initial(self, initial):
         if not isinstance(initial, np.ndarray):
             raise ValueError("initial doit être un array numpy")
-        if np.shape(initial) != (1, self.nbs):
-            raise ValueError("initial n'a pas la bonne dimension")
-        if not np.isclose(np.array([initial.np.sum()]), np.array([1.0])):
+        if np.shape(initial) != (self.nbs, ):
+            msg_err = "initial n'a pas la bonne dimension.\n"
+            msg_err += "Sa dimension est " + str(np.shape(initial)) + ".\n"
+            msg_err += "Dimension attendu :" + str((self.nbs,))
+            raise ValueError(msg_err)
+        if not np.isclose(np.array([initial.sum()]), np.array([1.0])):
             raise ValueError("la somme des probabilités initiales doit être 1")
         for pi in initial:
             if pi < 0:
@@ -67,9 +70,12 @@ class HMM():
         if not isinstance(transitions, np.ndarray):
             raise ValueError("transitions doit être un array numpy")
         if np.shape(transitions) != (self.nbs, self.nbs):
-            raise ValueError("transitions n'a pas la bonne dimension")
+            msg_err = "transitions n'a pas la bonne dimension.\n"
+            msg_err += "Sa dimension est " + str(np.shape(transitions)) + ".\n"
+            msg_err += "Dimension attendu :" + str((self.nbs, self.nbs))
+            raise ValueError(msg_err)
         for line in range(self.nbs):
-            if not np.isclose(np.array([transitions[line].np.sum()]), np.array([1.0])):
+            if not np.isclose(np.array([transitions[line].sum()]), np.array([1.0])):
                 raise ValueError("la somme des probabilités de transition, ligne par ligne, doit être 1")
         for t in transitions:
             if t < 0:
@@ -115,7 +121,7 @@ class HMM():
         initial = [float(next(lines)) for i in range(nbs)]
         transitions = [[j for j in map(float, next(lines).split())] for i in range(nbs)]
         emmissions = [[j for j in map(float, next(lines).split())] for i in range(nbl)]
-        return HMM(nbl, nbs, np.ndarray(initial), np.ndarray(transitions), np.ndarray(emmissions))
+        return HMM(nbl, nbs, np.array(initial).T, np.array(transitions), np.array(emmissions))
 
 ### Exo 11 question 4
     def save(self,adr='HMM.txt'):
