@@ -153,3 +153,12 @@ class HMM():
             S += [s]
         return O
 
+    def pfw(self, w):
+        n = len(w)
+        F = []
+        for k in range(self.nbs):
+            F += [self.initial[k]*self.emissions[k, w[0]]]
+        F = np.array(F)
+        for i in range(1, n):
+            F = np.dot(F, self.transitions)*self.emissions[:, w[i]]
+        return F.sum()
