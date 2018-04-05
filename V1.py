@@ -115,6 +115,25 @@ class HMM():
         transitions = [[j for j in map(int, next(lines).split())] for i in range(nbs)]
         emmissions = [[j for j in map(int, next(lines).split())] for i in range(nbl)]
 
+
+    def save(self,adr='HMM.txt'):
+        fichier = open(adr, "w")
+        fichier.write("# The number of letters \n")
+        fichier.write(str(self.nbl))
+        fichier.write("# The number of states \n")
+        fichier.write(str(self.nbs))
+        fichier.write("\n # The initial transitions \n")
+        for l in self.initial :
+            fichier.write('i'+"\n")
+        fichier.write("\n # The internal transitions \n")
+        for l in self.transitions:
+            fichier.write('i' + "\n")
+        fichier.write("\n # The emissions\n")
+        for l in self.emissions :
+            fichier.write('i'+"\n")
+        fichier.close()
+
+
     @staticmethod
     def draw_multinomial(L):
         x = rd.random()
