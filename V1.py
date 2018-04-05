@@ -1,4 +1,5 @@
 import numpy as np
+import random as rd
 
 
 class HMM():
@@ -113,3 +114,22 @@ class HMM():
         initial = [int(next(lines)) for i in range(nbs)]
         transitions = [[j for j in map(int, next(lines).split())] for i in range(nbs)]
         emmissions = [[j for j in map(int, next(lines).split())] for i in range(nbl)]
+
+    @staticmethod
+    def draw_multinomial(L):
+        x = rd.random()
+        L = [0] + L
+        for i in range(len(L)-1):
+            if L[i] <= x <= L[i+1]:
+                return i+1
+
+    def gen_rand(self, n):
+        s = HMM.draw_multinomial(self.initial)
+        S = [s]
+        O = []
+        for i in range(n):
+            O += [HMM.draw_multinomial(self.emissions[s])]
+            s = HMM.draw_multinomial(self.transitions[s])
+            S += [s]
+        return O
+
