@@ -111,9 +111,10 @@ class HMM():
         lines = HMM.__ligns_not_comments(adr)
         nbl = int(next(lines))
         nbs = int(next(lines))
-        initial = [int(next(lines)) for i in range(nbs)]
-        transitions = [[j for j in map(int, next(lines).split())] for i in range(nbs)]
-        emmissions = [[j for j in map(int, next(lines).split())] for i in range(nbl)]
+        initial = [float(next(lines)) for i in range(nbs)]
+        transitions = [[j for j in map(float, next(lines).split())] for i in range(nbs)]
+        emmissions = [[j for j in map(float, next(lines).split())] for i in range(nbl)]
+        return HMM(nbl, nbs, np.ndarray(initial), np.ndarray(transitions), np.ndarray(emmissions))
 
 
     def save(self,adr='HMM.txt'):
