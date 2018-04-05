@@ -1,7 +1,7 @@
 import numpy as np
 import random as rd
 
-
+### Exo 11 question 1
 class HMM():
     """ Define an HMM"""
 
@@ -106,16 +106,18 @@ class HMM():
                 if line[0] != "#":
                     yield line
 
+### Exo 11 question 2
     @staticmethod
     def load(adr):
         lines = HMM.__ligns_not_comments(adr)
         nbl = int(next(lines))
         nbs = int(next(lines))
-        initial = [int(next(lines)) for i in range(nbs)]
-        transitions = [[j for j in map(int, next(lines).split())] for i in range(nbs)]
-        emmissions = [[j for j in map(int, next(lines).split())] for i in range(nbl)]
+        initial = [float(next(lines)) for i in range(nbs)]
+        transitions = [[j for j in map(float, next(lines).split())] for i in range(nbs)]
+        emmissions = [[j for j in map(float, next(lines).split())] for i in range(nbl)]
+        return HMM(nbl, nbs, np.ndarray(initial), np.ndarray(transitions), np.ndarray(emmissions))
 
-
+### Exo 11 question 4
     def save(self,adr='HMM.txt'):
         fichier = open(adr, "w")
         fichier.write("# The number of letters \n")
@@ -133,6 +135,7 @@ class HMM():
             fichier.write('i'+"\n")
         fichier.close()
 
+### Exo 11 question 3
 
     @staticmethod
     def draw_multinomial(L):
