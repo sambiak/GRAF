@@ -124,6 +124,7 @@ class HMM():
                 return i+1
 
     def gen_rand(self, n):
+        rd.seed()
         s = HMM.draw_multinomial(self.initial)
         S = [s]
         O = []
