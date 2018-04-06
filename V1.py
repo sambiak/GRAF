@@ -77,9 +77,10 @@ class HMM():
         for line in range(self.nbs):
             if not np.isclose(np.array([transitions[line].sum()]), np.array([1.0])):
                 raise ValueError("la somme des probabilités de transition, ligne par ligne, doit être 1")
-        for t in transitions:
-            if t < 0:
-                raise ValueError("les probabilités doivent être positives")
+        for line in transitions:
+            for t in line:
+                if t < 0:
+                    raise ValueError("les probabilités doivent être positives")
         self.__transitions = transitions
 
     @property
@@ -93,11 +94,12 @@ class HMM():
         if np.shape(emissions) != (self.nbs, self.nbl):
             raise ValueError("emissions n'a pas la bonne dimension")
         for line in range(self.nbs):
-            if not np.isclose(np.array([emissions[line].np.sum()]), np.array([1.0])):
+            if not np.isclose(np.array([emissions[line].sum()]), np.array([1.0])):
                 raise ValueError("la somme des probabilités de transition, ligne par ligne, doit être 1")
-        for e in emissions:
-            if e < 0:
-                raise ValueError("les probabilités doivent être positives")
+        for line in emissions:
+            for e in line:
+                if e < 0:
+                    raise ValueError("les probabilités doivent être positives")
         self.__emissions = emissions
 
     @staticmethod
