@@ -152,9 +152,12 @@ class HMM():
     @staticmethod
     def draw_multinomial(L):
         x = rd.random()
-        L = [0] + L
-        for i in range(len(L)-1):
-            if L[i] <= x <= L[i+1]:
+        M = []
+        for i in range(len(L)):
+            M += L[:i].sum()
+        M += [1]
+        for i in range(len(M)-1):
+            if M[i] <= x <= M[i+1]:
                 return i+1
 
     def gen_rand(self, n):
