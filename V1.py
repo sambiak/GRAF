@@ -130,17 +130,21 @@ class HMM():
         fichier = open(adr, "w")
         fichier.write("# The number of letters \n")
         fichier.write(str(self.nbl))
-        fichier.write("# The number of states \n")
+        fichier.write("\n# The number of states \n")
         fichier.write(str(self.nbs))
-        fichier.write("\n # The initial transitions \n")
-        for l in self.initial :
-            fichier.write('i'+"\n")
-        fichier.write("\n # The internal transitions \n")
-        for l in self.transitions:
-            fichier.write('i' + "\n")
-        fichier.write("\n # The emissions\n")
-        for l in self.emissions :
-            fichier.write('i'+"\n")
+        fichier.write("\n# The initial transitions \n")
+        for i in self.initial :
+            fichier.write(str(i) + "\n")
+        fichier.write("# The internal transitions")
+        for line in self.transitions:
+            fichier.write("\n")
+            for t in line:
+                fichier.write(str(t) + ' ')
+        fichier.write("\n# The emissions")
+        for line in self.emissions :
+            fichier.write("\n")
+            for e in line:
+                fichier.write(str(e) + ' ')
         fichier.close()
 
 ### Exo 11 question 3
