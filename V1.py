@@ -155,10 +155,10 @@ class HMM():
         M = []
         for i in range(len(L)):
             M += L[:i].sum()
-        M += [1]
+        M = [0] + M
         for i in range(len(M)-1):
             if M[i] <= x <= M[i+1]:
-                return i+1
+                return i
 
     def gen_rand(self, n):
         rd.seed()
