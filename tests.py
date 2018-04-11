@@ -20,6 +20,10 @@ class TestSave(unittest.TestCase):
         M = HMM.load('test_gen_rand')
         self.assertEqual(1, M.pfw([0, 1, 2]))
 
+    def test_pfw2(self):
+        M = HMM.load('save2.txt')
+        self.assertEqual(0.5, M.pfw([0, 1, 2]))
+
     def test_pbw(self):
         M = HMM.load('test_gen_rand')
         self.assertEqual(1, M.pbw([0, 1, 2]))
