@@ -197,9 +197,9 @@ class HMM:
         n = len(w)
         B = []
         for k in range(self.nbs):
-            B += [[self.emissions[k, w[n-1]]]]
+            B += [[1]]
         B = np.array(B)
-        for i in range(n-2, -1, -1):
-            B = np.dot(self.transitions, B)*self.emissions[:, w[i]]
+        for i in range(n-1, 0, -1):
+            B = np.dot(self.transitions*self.emissions[:, w[i]], B)
         B = B*self.initial*self.emissions[:, w[0]]
         return B.sum()
