@@ -3,7 +3,7 @@ from V1 import HMM
 import numpy as np
 
 
-class TestSave(unittest.TestCase):
+class TestHMM(unittest.TestCase):
 
     def test_save1(self):
         t1 = HMM.load("save1.txt")
