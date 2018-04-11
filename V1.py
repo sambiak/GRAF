@@ -238,13 +238,10 @@ class HMM:
 
         return max(chemins, key=lambda x: x[1])
 
-
-
-### Exo 13
-
+# Exo 13
     def predit(self,w):
         H = self.initial
         for i in range(1, len(w)):
-            H = np.dot(self.transitions*self.emissions[:, w[i]], H)
+            H = np.dot(self.transitions*self.emissions.T[:, w[i]], H)
         H = list(H)
         return H.index(max(H))
