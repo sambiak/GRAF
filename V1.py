@@ -1,6 +1,7 @@
 import numpy as np
 import random as rd
 
+
 # Exo 11 question 1
 class HMM:
     """ Define an HMM"""
@@ -207,9 +208,9 @@ class HMM:
         """
 
         :param w: une séquence
-        :return: Le chemin de Viterbi de w et la probabilité associé test
+        :return: Le chemin de Viterbi de w et la probabilité associée
         """
-        #on met les chemins et les probalités dans un tableau de tuples
+        # on met les chemins et les probabilités dans un tableau de tuples
 
         chemins = []
         for k in range(self.nbs):
@@ -236,4 +237,3 @@ class HMM:
             chemins = chemins_t
 
         return max(chemins, key=lambda x: x[1])
-
