@@ -32,6 +32,9 @@ class TestHMM(unittest.TestCase):
         M = HMM.load('save2.txt')
         self.assertEqual(0.5, M.pbw([0, 1, 2]))
 
+    def test_predit(self):
+        M = HMM.load('test_gen_rand')
+        self.assertEqual(2, M.predit([0, 1]))
 
 if __name__ == '__main__':
     unittest.main()
