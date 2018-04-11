@@ -1,9 +1,10 @@
 import numpy as np
 import random as rd
 
-### Exo 11 question 1
-class HMM():
-    """ Define an HMM"""
+
+# Exo 11 question 1
+class HMM:
+    """Define an HMM"""
 
     def __init__(self, nbl, nbs, initial, transitions, emissions):
         # The number of letters
@@ -114,7 +115,7 @@ class HMM():
                 if line[0] != "#":
                     yield line
 
-### Exo 11 question 2
+# Exo 11 question 2
     @staticmethod
     def load(adr):
         lines = HMM.__ligns_not_comments(adr)
@@ -125,15 +126,15 @@ class HMM():
         emmissions = [[j for j in map(float, next(lines).split())] for i in range(nbl)]
         return HMM(nbl, nbs, np.array(initial).T, np.array(transitions), np.array(emmissions))
 
-### Exo 11 question 4
-    def save(self,adr='HMM.txt'):
+# Exo 11 question 4
+    def save(self, adr='HMM.txt'):
         fichier = open(adr, "w")
         fichier.write("# The number of letters \n")
         fichier.write(str(self.nbl))
         fichier.write("\n# The number of states \n")
         fichier.write(str(self.nbs))
         fichier.write("\n# The initial transitions \n")
-        for i in self.initial :
+        for i in self.initial:
             fichier.write(str(i) + "\n")
         fichier.write("# The internal transitions")
         for line in self.transitions:
@@ -141,21 +142,23 @@ class HMM():
             for t in line:
                 fichier.write(str(t) + ' ')
         fichier.write("\n# The emissions")
-        for line in self.emissions :
+        for line in self.emissions:
             fichier.write("\n")
             for e in line:
                 fichier.write(str(e) + ' ')
         fichier.close()
 
-### Exo 11 question 3
+# Exo 11 question 3
 
     @staticmethod
     def draw_multinomial(L):
         x = rd.random()
         M = []
+        sum = 0
         for i in range(len(L)):
-            M += L[:i].sum()
-        M = [0] + M
+            M += [sum]
+            sum += L[i]
+        M += [sum]
         for i in range(len(M)-1):
             if M[i] <= x <= M[i+1]:
                 return i
@@ -194,9 +197,9 @@ class HMM():
         n = len(w)
         B = []
         for k in range(self.nbs):
-            B += [self.initial[k, w[n-1]]]
+            B += [[self.emissions[k, w[n-1]]]]
         B = np.array(B)
-        for i in range(n-1, 0, -1):
+        for i in range(n-2, -1, -1):
             B = np.dot(self.transitions, B)*self.emissions[:, w[i]]
         B = B*self.initial*self.emissions[:, w[0]]
         return B.sum()
