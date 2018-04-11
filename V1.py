@@ -207,7 +207,7 @@ class HMM:
         """
 
         :param w: une séquence
-        :return: Le chemin de Viterbi de w et la probabilité associé
+        :return: Le chemin de Viterbi de w et la probabilité associé test
         """
         #on met les chemins et les probalités dans un tableau de tuples
 
