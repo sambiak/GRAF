@@ -154,12 +154,12 @@ class HMM:
     def draw_multinomial(L):
         x = rd.random()
         M = []
-        sum = 0
+        somme = 0
         for i in range(len(L)):
-            M += [sum]
-            sum += L[i]
-        M += [sum]
-        for i in range(len(M)-1):
+            M += [somme]
+            somme += L[i]
+        M += [somme]
+        for i in range(len(M) - 1):
             if M[i] <= x <= M[i+1]:
                 return i
 
@@ -230,7 +230,7 @@ class HMM:
 
                 for s in range(self.nbs):
                     probabilité_t = chemins[s][1]*self.emissions[(s, w[i])]*self.transitions[(s, k)]
-                    if probabilité_t > probabilité:
+                    if probabilité_t >= probabilité:
                         chemin = (chemins[s][0] + [s], probabilité_t)
                         probabilité = probabilité_t
                 chemins_t.append(chemin)
@@ -245,6 +245,6 @@ class HMM:
     def predit(self,w):
         H = self.initial
         for i in range (1, len(w)):
-            H= np.dot(self.transitions*self.emissions[:, w[i]], H)
+            H = np.dot(self.transitions*self.emissions[:, w[i]], H)
         H = list(H)
         return H.index(max(H))
