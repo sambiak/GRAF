@@ -244,7 +244,7 @@ class HMM:
 
     def predit(self,w):
         H = self.initial
-        for i in range (1, len(w)):
+        for i in range(1, len(w)):
             H = np.dot(self.transitions*self.emissions[:, w[i]], H)
         H = list(H)
         return H.index(max(H))
