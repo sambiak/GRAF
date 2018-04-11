@@ -1,10 +1,9 @@
 import numpy as np
 import random as rd
 
-
 # Exo 11 question 1
 class HMM:
-    """Define an HMM"""
+    """ Define an HMM"""
 
     def __init__(self, nbl, nbs, initial, transitions, emissions):
         # The number of letters
@@ -203,3 +202,38 @@ class HMM:
             B = np.dot(self.transitions, B)*self.emissions[:, w[i]]
         B = B*self.initial*self.emissions[:, w[0]]
         return B.sum()
+
+    def viterbi(self, w):
+        """
+
+        :param w: une séquence
+        :return: Le chemin de Viterbi de w et la probabilité associé
+        """
+        #on met les chemins et les probalités dans un tableau de tuples
+
+        chemins = []
+        for k in range(self.nbs):
+            chemin = [0]
+            probabilité = 0
+            for s in range(self.nbs):
+                probabilité_t = self.emissions[(s, w[0])]*self.initial[s]*self.transitions[(s, k)]
+                if probabilité_t >= probabilité:
+                    chemin[0] = s
+                    probabilité = probabilité_t
+            chemins.append((chemin, probabilité))
+
+        for i in range(1, len(w)):
+            chemins_t = []
+            for k in range(self.nbs):
+                probabilité = 0
+
+                for s in range(self.nbs):
+                    probabilité_t = chemins[s][1]*self.emissions[(s, w[i])]*self.transitions[(s, k)]
+                    if probabilité_t > probabilité:
+                        chemin = (chemins[s][0] + [s], probabilité_t)
+                        probabilité = probabilité_t
+                chemins_t.append(chemin)
+            chemins = chemins_t
+
+        return max(chemins, key=lambda x: x[1])
+
