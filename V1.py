@@ -121,9 +121,9 @@ class HMM:
         lines = HMM.__ligns_not_comments(adr)
         nbl = int(next(lines))
         nbs = int(next(lines))
-        initial = [float(next(lines)) for i in range(nbs)]
-        transitions = [[j for j in map(float, next(lines).split())] for i in range(nbs)]
-        emmissions = [[j for j in map(float, next(lines).split())] for i in range(nbl)]
+        initial = [float(next(lines)) for _ in range(nbs)]
+        transitions = [[j for j in map(float, next(lines).split())] for _ in range(nbs)]
+        emmissions = [[j for j in map(float, next(lines).split())] for _ in range(nbl)]
         return HMM(nbl, nbs, np.array(initial).T, np.array(transitions), np.array(emmissions))
 
 # Exo 11 question 4
