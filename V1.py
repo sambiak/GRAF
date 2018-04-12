@@ -185,7 +185,7 @@ class HMM:
             F += [self.initial[k]*self.emissions[k, w[0]]]
         F = np.array(F)
         for i in range(1, n):
-            F = np.dot(F, self.transitions)*self.emissions[:, w[i]]
+            F = (F @ self.transitions)*self.emissions[:, w[i]]
         return F.sum()
 
     def pbw(self, w):
