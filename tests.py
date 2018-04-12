@@ -40,5 +40,9 @@ class TestHMM(unittest.TestCase):
         M = HMM.load('save3.txt')
         self.assertEqual(([0, 1, 2], 1.0), M.viterbi([0, 1, 2]))
 
+    def test_viterbi2(self):
+        M = HMM.load('save2.txt')
+        self.assertEqual(([0, 1, 2], 0.5), M.viterbi([0, 1, 2]))
+
 if __name__ == '__main__':
     unittest.main()
