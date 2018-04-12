@@ -250,10 +250,8 @@ class HMM:
     def predit(self,w):
         H = self.initial
         for i in range(len(w)):
-            H = (self.transitions*self.emissions.T[w[i], :]) @ H
-        print(H)
+            H = (self.transitions.T*self.emissions[:, w[i]].T) @ H
         P = []
         for l in range(self.nbl):
             P += [self.emissions[:, l] @ H]
-        print(P)
         return P.index(max(P))
