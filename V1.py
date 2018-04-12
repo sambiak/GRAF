@@ -195,7 +195,7 @@ class HMM:
             F += [self.initial[k]*self.emissions[k, w[0]]]
         F = np.array(F)
         for i in range(1, n):
-            F = (F @ self.transitions)*self.emissions[:, w[i]]
+            F = (F  @ self.transitions)*self.emissions[:, w[i]]
         return F.sum()
 
     def genere_b(self, w):
@@ -221,7 +221,7 @@ class HMM:
             B += [[1]]
         B = np.array(B)
         for i in range(n-1, 0, -1):
-            B = np.dot(self.transitions*self.emissions[:, w[i]], B)
+            B = (self.transitions*self.emissions[:, w[i]]) @ B
         B = B*self.initial*self.emissions[:, w[0]]
         return B.sum()
 
@@ -262,10 +262,12 @@ class HMM:
 # Exo 13
     def predit(self,w):
         H = self.initial
-        for i in range(1, len(w)):
-            H = np.dot(self.transitions*self.emissions.T[:, w[i]], H)
-        H = list(H)
-        return H.index(max(H))
+        for i in range(len(w)):
+            H = (self.transitions.T*self.emissions[:, w[i]].T) @ H
+        P = []
+        for l in range(self.nbl):
+            P += [self.emissions[:, l] @ H]
+        return P.index(max(P))
 
     def BW1(self, S):
         pass

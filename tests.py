@@ -52,7 +52,19 @@ class TestHMM(unittest.TestCase):
 
     def test_predit(self):
         M = HMM.load('save3.txt')
+        self.assertEqual(0, M.predit([0, 1, 2]))
+
+    def test_predit2(self):
+        M = HMM.load('save3.txt')
+        self.assertEqual(1, M.predit([0]))
+
+    def test_predit3(self):
+        M = HMM.load('save4.txt')
         self.assertEqual(2, M.predit([0, 1]))
+
+    def test_predit4(self):
+        M = HMM.load('save4.txt')
+        self.assertEqual(0, M.predit([0, 1, 1]))
 
     ####################################################################
     # Test Viterbi
