@@ -174,6 +174,14 @@ class HMM:
             S += [s]
         return O
 
+    def genere_f(self, w):
+        f = np.zeros((len(w), self.nbs))
+        for k in range(self.nbs):
+            f[0][k] = self.initial[k]*self.emissions[k, w[0]]
+
+        for i in range(1, len(w)):
+            f[i] = (f[i - 1] @ self.transitions)*self.emissions[:, w[i]]
+
     def pfw(self, w):
         """
         :param w: séquence générée par le HMM self
