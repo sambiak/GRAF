@@ -271,3 +271,13 @@ class HMM:
 
     def BW1(self, S):
         pass
+
+    @staticmethod
+    def BW2(nbs, nbl, S, N):
+        initial = []
+        transitions = []
+        emissions = []
+        M = HMM(nbl, nbs, initial, transitions, emissions)
+        for i in range(N):
+            M = M.BW1(S)
+        return M
