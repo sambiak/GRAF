@@ -182,6 +182,8 @@ class HMM:
         for i in range(1, len(w)):
             f[i] = (f[i - 1] @ self.transitions)*self.emissions[:, w[i]]
 
+        return f
+
     def pfw(self, w):
         """
         :param w: séquence générée par le HMM self
@@ -195,6 +197,17 @@ class HMM:
         for i in range(1, n):
             F = (F @ self.transitions)*self.emissions[:, w[i]]
         return F.sum()
+
+    def genere_b(self, w):
+        b = np.zeros((self.nbs, len(w)))
+
+        for k in range(self.nbs):
+            b[k][0] = 1
+
+        for i in range(len(w) - 1, -1, -1):
+            b[i] = np.dot(self.transitions*self.emissions[:, w[i]], b[i + 1])
+
+        return b
 
     def pbw(self, w):
         """
@@ -253,3 +266,6 @@ class HMM:
             H = np.dot(self.transitions*self.emissions.T[:, w[i]], H)
         H = list(H)
         return H.index(max(H))
+
+    def BW1(self, S):
+        pass
