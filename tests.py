@@ -34,7 +34,7 @@ class TestHMM(unittest.TestCase):
 
     def test_predit(self):
         M = HMM.load('save3.txt')
-        self.assertEqual(2, M.predit([0, 1]))
+        self.assertEqual(1, M.predit([0]))
 
     def test_viterbi(self):
         M = HMM.load('save3.txt')
