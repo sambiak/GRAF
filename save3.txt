@@ -1,11 +1,16 @@
+# The number of letters
 3
+# The number of states
 3
+# The initial transitions
 1
 0
 0
+# The internal transitions
 0 1 0
 0 0 1
 1 0 0
+# The emissions
 1 0 0
 0 1 0
 0 0 1
