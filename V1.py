@@ -274,9 +274,35 @@ class HMM:
 
     @staticmethod
     def BW2(nbs, nbl, S, N):
+        rd.seed()
+        sum = 0
         initial = []
+        for i in range(nbs):
+            x = rd.random()
+            initial += [x]
+            sum += x
+        for i in range(nbs):
+            initial[i] /= sum
         transitions = []
+        for j in range(nbs):
+            transitions += [[]]
+            sum = 0
+            for i in range(nbs):
+                x = rd.random()
+                transitions[j] += [x]
+                sum += x
+            for i in range(nbs):
+                transitions[j][i] /= sum
         emissions = []
+        for j in range(nbs):
+            emissions += [[]]
+            sum = 0
+            for i in range(nbl):
+                x = rd.random()
+                emissions[j] += [x]
+                sum += x
+            for i in range(nbl):
+                emissions[j][i] /= sum
         M = HMM(nbl, nbs, initial, transitions, emissions)
         for i in range(N):
             M = M.BW1(S)
