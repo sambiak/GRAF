@@ -176,13 +176,11 @@ class HMM:
 
     def genere_f(self, w):
         f = np.zeros((len(w), self.nbs))
-        for k in range(self.nbs):
-            f[0][k] = self.initial[k]*self.emissions[k, w[0]]
-
+        f[0] = self.initial*self.emissions[:, w[0]]
         for i in range(1, len(w)):
             f[i] = (f[i - 1] @ self.transitions)*self.emissions[:, w[i]]
 
-        return f
+        return f.T
 
     def pfw(self, w):
         """
@@ -260,7 +258,7 @@ class HMM:
         return max(chemins, key=lambda x: x[1])
 
 # Exo 13
-    def predit(self,w):
+    def predit(self, w):
         H = self.initial
         for i in range(len(w)):
             H = (self.transitions.T*self.emissions[:, w[i]].T) @ H
@@ -269,8 +267,19 @@ class HMM:
             P += [self.emissions[:, l] @ H]
         return P.index(max(P))
 
-    def BW1(self, S):
-        pass
+    @staticmethod
+    def BW1(m0, s):
+        """
+
+        :type m0: HMM
+        """
+        gammas = []
+        for j, w in enumerate(s):
+            f = m0.genere_f(w)
+            b = m0.genere_b(w)
+            #Je suis beaucoup trop fier de ces deux lignes
+            gamma = (f*b)/np.einsum('ki,ki->i', f, b)
+
 
     @staticmethod
     def BW2(nbs, nbl, S, N):
