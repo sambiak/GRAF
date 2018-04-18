@@ -281,7 +281,7 @@ class HMM:
             gamma = (f*b)/np.einsum('ki,ki->i', f, b)
             epsilon =  []
             for t in range(len(w) - 1):
-                dénominateur = np.einsum('k , kl, l, l', f[:,t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
+                dénominateur = np.einsum('k , kl, l, l ->', f[:,t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
             #
 
     @staticmethod
