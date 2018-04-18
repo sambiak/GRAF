@@ -274,6 +274,7 @@ class HMM:
         :type m0: HMM
         """
         gammas = []
+        epsilons = []
         for j, w in enumerate(s):
             f = m0.genere_f(w)
             b = m0.genere_b(w)
@@ -284,6 +285,18 @@ class HMM:
                 dénominateur = np.einsum('k,kl,l,l->', f[:,t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
                 numérateur = f[:, t]*m0.transitions*(m0.emissions[: , w[t + 1]]*b[:, t + 1]).T
                 epsilon.append(numérateur/dénominateur)
+            gammas.append(gamma)
+            epsilons.append(epsilon)
+        pi = gamma[:, 1]
+        z_t = np.array([1 for _ in range(m0.nbs)])
+        T = epsilons[0][0]
+        for t in range(1, len(s[0]) - 1):
+            T += epsilons[0][t]
+        for j in range(1, len(s)):
+            for t in range(len(s[j]) - 1):
+                T += epsilons[j][t]
+        T = T/z_t
+
 
             #
 
