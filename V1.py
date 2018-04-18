@@ -329,7 +329,7 @@ class HMM:
             #
 
     @staticmethod
-    def BW2(nbs, nbl, S, N):
+    def gen_HMM(nbs, nbl):
         rd.seed()
         sum = 0
         initial = []
@@ -359,7 +359,18 @@ class HMM:
                 sum += x
             for i in range(nbl):
                 emissions[j][i] /= sum
-        M = HMM(nbl, nbs, initial, transitions, emissions)
+        return HMM(nbl, nbs, initial, transitions, emissions)
+
+    @staticmethod
+    def BW2(nbs, nbl, S, N):
+        M = HMM.gen_HMM(nbs, nbl)
         for i in range(N):
             M = HMM.BW1(M, S)
         return M
+
+    @staticmethod
+    def BW3(nbs, nbl, w, n, m):
+        mùlijhdfsk = []
+        for i in range(m):
+            mùlijhdfsk += [HMM.BW2(nbs, nbl, [w], n)]
+        return max(mùlijhdfsk, key=lambda x: x.pfw(w))
