@@ -257,6 +257,32 @@ class HMM:
 
         return max(chemins, key=lambda x: x[1])
 
+# Exo 15
+    def pw_viterbi(self, w):
+        v = self.viterbi(w)
+        res = 1
+        for i in range(len(w)):
+            res *= self.emissions[v[i], w[i]]
+        return res
+
+    def pviterbi_w(self, w):
+        v = self.viterbi(w)
+        p = self.pfw(w)
+        pwv = self.initial[v[0]]
+        for i in range(len(w)-1):
+            pwv *= self.emissions[v[i], w[i]] * self.transitions[v[i], v[i+1]]
+        pwv *= self.emissions[v[-1], w[-1]]
+        return pwv/p
+
+# Exo 16
+    def nbviterbi(self, w, s):
+        v = self.viterbi(w)
+        nb = 0
+        for i in range(len(w)):
+            if v[i] == s[i]:
+                nb += 1
+        return nb
+
 # Exo 13
     def predit(self, w):
         H = self.initial
@@ -335,5 +361,5 @@ class HMM:
                 emissions[j][i] /= sum
         M = HMM(nbl, nbs, initial, transitions, emissions)
         for i in range(N):
-            M = M.BW1(S)
+            M = HMM.BW1(M, S)
         return M
