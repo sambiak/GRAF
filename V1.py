@@ -296,7 +296,9 @@ class HMM:
             for t in range(len(s[j]) - 1):
                 T += epsilons[j][t]
         T = T/z_t
-
+        pi = gammas[0][:, 1]
+        for j in range(1, len(s)):
+            pi += gammas[j][:, 1]
 
             #
 
