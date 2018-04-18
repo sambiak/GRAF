@@ -282,6 +282,9 @@ class HMM:
             epsilon =  []
             for t in range(len(w) - 1):
                 dénominateur = np.einsum('k,kl,l,l->', f[:,t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
+                numérateur = f[:, t]*m0.transitions*(m0.emissions[: , w[t + 1]]*b[:, t + 1]).T
+                epsilon.append(numérateur/dénominateur)
+
             #
 
     @staticmethod
