@@ -302,6 +302,14 @@ class HMM:
         return res
 
     @staticmethod
+    def epsilon(m0, w, f, b):
+        epsilon = []
+        for t in range(len(w) - 1):
+            dénominateur = np.einsum('k,kl,l,l->', f[:, t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
+            numérateur = f[:, t] * m0.transitions * (m0.emissions[:, w[t + 1]] * b[:, t + 1]).T
+            epsilon.append(numérateur / dénominateur)
+        return np.array(epsilon)
+    @staticmethod
     def BW1(m0, s):
         """
 
@@ -314,13 +322,11 @@ class HMM:
             b = m0.genere_b(w)
             #Je suis beaucoup trop fier de ces deux lignes
             gamma = (f*b)/np.einsum('ki,ki->i', f, b)
-            epsilon =  []
-            for t in range(len(w) - 1):
-                denominateur = np.einsum('k,kl,l,l->', f[:,t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
-                numerateur = f[:, t]*m0.transitions*(m0.emissions[: , w[t + 1]]*b[:, t + 1]).T
-                epsilon.append(numerateur/denominateur)
+            epsilon =  HMM.epsilon(m0, w, f, b)
             gammas.append(gamma)
             epsilons.append(epsilon)
+        epsilons = np.array(epsilons)
+        gammas = np.array(gammas)
         pi = gamma[:, 1]
         z_t = np.array([1 for _ in range(m0.nbs)])
         T = epsilons[0][0]
