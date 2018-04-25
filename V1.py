@@ -223,6 +223,8 @@ class HMM:
         B = B*self.initial*self.emissions[:, w[0]]
         return B.sum()
 
+#Exo 14
+
     def viterbi(self, w):
         """
 
@@ -293,6 +295,12 @@ class HMM:
             P += [self.emissions[:, l] @ H]
         return P.index(max(P))
 
+    def log_vraissemblance(self, S):
+        res = 0
+        for w in S:
+            res += np.emath.log(self.pfw(w))
+        return res
+
     @staticmethod
     def BW1(m0, s):
         """
@@ -308,9 +316,9 @@ class HMM:
             gamma = (f*b)/np.einsum('ki,ki->i', f, b)
             epsilon =  []
             for t in range(len(w) - 1):
-                dénominateur = np.einsum('k,kl,l,l->', f[:,t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
-                numérateur = f[:, t]*m0.transitions*(m0.emissions[: , w[t + 1]]*b[:, t + 1]).T
-                epsilon.append(numérateur/dénominateur)
+                denominateur = np.einsum('k,kl,l,l->', f[:,t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
+                numerateur = f[:, t]*m0.transitions*(m0.emissions[: , w[t + 1]]*b[:, t + 1]).T
+                epsilon.append(numerateur/denominateur)
             gammas.append(gamma)
             epsilons.append(epsilon)
         pi = gamma[:, 1]
@@ -370,7 +378,7 @@ class HMM:
 
     @staticmethod
     def BW3(nbs, nbl, w, n, m):
-        mùlijhdfsk = []
+        mlijhdfsk = []
         for i in range(m):
-            mùlijhdfsk += [HMM.BW2(nbs, nbl, [w], n)]
-        return max(mùlijhdfsk, key=lambda x: x.pfw(w))
+            mlijhdfsk += [HMM.BW2(nbs, nbl, [w], n)]
+        return max(mlijhdfsk, key=lambda x: x.pfw(w))
