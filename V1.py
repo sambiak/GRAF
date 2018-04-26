@@ -197,14 +197,11 @@ class HMM:
         return F.sum()
 
     def genere_b(self, w):
-        b = np.zeros((self.nbs, len(w)))
-
-        for k in range(self.nbs):
-            b[k][0] = 1
+        b = np.ones((self.nbs, len(w)))
 
         for i in range(len(w) - 1, -1, -1):
-            b[i] = np.dot(self.transitions*self.emissions[:, w[i]], b[i + 1])
-
+            b[i,:] = np.einsum('kl,l->k', self.transitions, self.emissions[:,w[i]])*b[i + 1]
+        print(b)
         return b
 
     def pbw(self, w):
@@ -213,15 +210,8 @@ class HMM:
         :param w: séquence générée par le HMM self
         :return: la probabilité que self génère cette séquence
         """
-        n = len(w)
-        B = []
-        for k in range(self.nbs):
-            B += [[1]]
-        B = np.array(B)
-        for i in range(n-1, 0, -1):
-            B = (self.transitions*self.emissions[:, w[i]]) @ B
-        B = B*self.initial*self.emissions[:, w[0]]
-        return B.sum()
+        b = self.genere_b(w)
+        return b[:, 0].sum()
 
 #Exo 14
 
