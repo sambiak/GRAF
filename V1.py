@@ -256,7 +256,9 @@ class HMM:
                         probabilité = probabilité_t
                 chemins_t.append(chemin)
             chemins = chemins_t
-
+        for i in range(len(chemins)):
+            chem = (chemins[i][0], np.emath.log(chemins[i][1]))
+            chemins[i] = chem
         return max(chemins, key=lambda x: x[1])
 
 # Exo 15

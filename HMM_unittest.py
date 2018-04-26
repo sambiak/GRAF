@@ -63,7 +63,7 @@ class HMMTest(unittest.TestCase):
     def test_BaumWelch(self):
         h = self.A
         w = [0,1]
-        h = HMM.BW1(h, [w])
+        h = HMM.HMM.BW1(h, [w])
         np.testing.assert_allclose(h.initial,np.array([ 0.51724138, 0.48275862]))
         np.testing.assert_allclose(h.transitions,np.array([[ 0.9375,0.0625 ], [ 0.15625, 0.84375]]))
         np.testing.assert_allclose(h.emissions,np.array([[ 0.48,0.52], [ 0.52336449, 0.47663551]]))
