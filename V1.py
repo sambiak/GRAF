@@ -25,7 +25,7 @@ class HMM:
     @nbl.setter
     def nbl(self, nbl):
         if not isinstance(nbl, int):
-            raise ValueError("nbl doit être entier")
+            raise TypeError("nbl doit être entier")
         if nbl <= 0:
             raise ValueError("nbl doit être strictement positif")
         self.__nbl = nbl
@@ -37,7 +37,7 @@ class HMM:
     @nbs.setter
     def nbs(self, nbs):
         if not isinstance(nbs, int):
-            raise ValueError("nbl doit être entier")
+            raise TypeError("nbl doit être entier")
         if nbs <= 0:
             raise ValueError("nbl doit être strictement positif")
         self.__nbs = nbs
@@ -49,7 +49,7 @@ class HMM:
     @initial.setter
     def initial(self, initial):
         if not isinstance(initial, np.ndarray):
-            raise ValueError("initial doit être un array numpy")
+            raise TypeError("initial doit être un array numpy")
         if np.shape(initial) != (self.nbs, ):
             msg_err = "initial n'a pas la bonne dimension.\n"
             msg_err += "Sa dimension est " + str(np.shape(initial)) + ".\n"
@@ -69,7 +69,7 @@ class HMM:
     @transitions.setter
     def transitions(self, transitions):
         if not isinstance(transitions, np.ndarray):
-            raise ValueError("transitions doit être un array numpy")
+            raise TypeError("transitions doit être un array numpy")
         if np.shape(transitions) != (self.nbs, self.nbs):
             msg_err = "transitions n'a pas la bonne dimension.\n"
             msg_err += "Sa dimension est " + str(np.shape(transitions)) + ".\n"
@@ -91,7 +91,7 @@ class HMM:
     @emissions.setter
     def emissions(self, emissions):
         if not isinstance(emissions, np.ndarray):
-            raise ValueError("emissions doit être un array numpy")
+            raise TypeError("emissions doit être un array numpy")
         if np.shape(emissions) != (self.nbs, self.nbl):
             raise ValueError("emissions n'a pas la bonne dimension")
         for line in range(self.nbs):
@@ -172,7 +172,7 @@ class HMM:
             O += [HMM.draw_multinomial(self.emissions[s])]
             s = HMM.draw_multinomial(self.transitions[s])
             S += [s]
-        return O
+        return O, S
 
     def genere_f(self, w):
         f = np.zeros((len(w), self.nbs))
@@ -309,6 +309,8 @@ class HMM:
             numérateur = f[:, t] * m0.transitions * (m0.emissions[:, w[t + 1]] * b[:, t + 1]).T
             epsilon.append(numérateur / dénominateur)
         return np.array(epsilon)
+
+
     @staticmethod
     def BW1(m0, s):
         """
@@ -373,6 +375,9 @@ class HMM:
                 sum += x
             for i in range(nbl):
                 emissions[j][i] /= sum
+        initial = np.array(initial)
+        transitions = np.array(transitions)
+        emissions = np.array(emissions)
         return HMM(nbl, nbs, initial, transitions, emissions)
 
     @staticmethod
