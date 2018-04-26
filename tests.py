@@ -20,7 +20,7 @@ class TestHMM(unittest.TestCase):
 
     def test_gen_rand(self):
         M = HMM.load('save3.txt')
-        self.assertEqual([0, 1, 2, 0, 1, 2, 0, 1, 2], M.gen_rand(9))
+        self.assertEqual([0, 1, 2, 0, 1, 2, 0, 1, 2], M.gen_rand(9)[0])
 
     ####################################################################
     # Test PFW
@@ -72,11 +72,11 @@ class TestHMM(unittest.TestCase):
 
     def test_viterbi(self):
         M = HMM.load('save3.txt')
-        self.assertEqual(([0, 1, 2], 1.0), M.viterbi([0, 1, 2]))
+        self.assertEqual(([0, 1, 2], np.emath.log(1.0)), M.viterbi([0, 1, 2]))
 
     def test_viterbi2(self):
         M = HMM.load('save2.txt')
-        self.assertEqual(([0, 1, 2], 0.5), M.viterbi([0, 1, 2]))
+        self.assertEqual(([0, 1, 2], np.emath.log(0.5)), M.viterbi([0, 1, 2]))
 
     def test_BW(self):
         h = HMM.load("./HMM1")

@@ -43,7 +43,7 @@ class HMMTest(unittest.TestCase):
 
     def test_predit(self):
         for i in range(100):
-            h = HMM.HMM.gen_HMM(2,5)
+            h = HMM.HMM.gen_HMM(5,2)
             w = h.gen_rand(10)[1]
             w0 = w + [0]
             w1 = w + [1]
