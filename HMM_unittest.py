@@ -45,6 +45,7 @@ class HMMTest(unittest.TestCase):
         for i in range(100):
             h = HMM.HMM.gen_HMM(5,2)
             w = h.gen_rand(10)[1]
+            print(w)
             w0 = w + [0]
             w1 = w + [1]
             x = h.predit(w)

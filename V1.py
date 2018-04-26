@@ -172,7 +172,7 @@ class HMM:
             O += [HMM.draw_multinomial(self.emissions[s])]
             s = HMM.draw_multinomial(self.transitions[s])
             S += [s]
-        return O, S
+        return S, O
 
     def genere_f(self, w):
         f = np.zeros((len(w), self.nbs))
