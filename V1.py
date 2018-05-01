@@ -197,11 +197,12 @@ class HMM:
         return F.sum()
 
     def genere_b(self, w):
-        b = np.ones((self.nbs, len(w)))
+        assert len(w) != 0
 
-        for i in range(len(w) - 1, -1, -1):
-            b[i,:] = np.einsum('kl,l->k', self.transitions, self.emissions[:,w[i]])*b[i + 1]
-        print(b)
+        b = np.ones((self.nbs, len(w)))
+        for i in reversed(range(len(w) - 1)):
+            b[:,i] = self.transitions @ (self.emissions[:, w[i + 1]] * b[:, i + 1])
+
         return b
 
     def pbw(self, w):
@@ -211,8 +212,7 @@ class HMM:
         :return: la probabilité que self génère cette séquence
         """
         b = self.genere_b(w)
-        return b[:, 0].sum()
-
+        return np.einsum("k,k,k->", self.initial, self.emissions[:, w[0]], b[:,0])
 #Exo 14
 
     def viterbi(self, w):
