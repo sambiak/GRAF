@@ -35,8 +35,8 @@ class HMMTest(unittest.TestCase):
 
     def test_PFw_PBw(self):
         h = self.A
-        self.assertEqual(h.pfw((0,)),0.6)
-        self.assertEqual(h.pbw((1,)),0.4)
+        self.assertEqual(h.pfw([0]),0.6)
+        self.assertEqual(h.pbw([1]),0.4)
         for i in range(100):
             w = h.gen_rand(10)[1]
             self.assertAlmostEqual(h.pfw(w),h.pbw(w))
@@ -45,7 +45,6 @@ class HMMTest(unittest.TestCase):
         for i in range(100):
             h = HMM.HMM.gen_HMM(5,2)
             w = h.gen_rand(10)[1]
-            print(w)
             w0 = w + [0]
             w1 = w + [1]
             x = h.predit(w)

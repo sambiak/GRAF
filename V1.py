@@ -240,7 +240,9 @@ class HMM:
                 probabilité = 0
 
                 for s in range(self.nbs):
-                    probabilité_t = chemins[s][1]*self.emissions[(s, w[i])]*self.transitions[(s, k)]
+                    probabilité_t = chemins[s][1]*self.emissions[(s, w[i])]
+                    if i < (len(w) - 1) :
+                        probabilité_t *= self.transitions[(s, k)]
                     if probabilité_t >= probabilité:
                         chemin = (chemins[s][0] + [s], probabilité_t)
                         probabilité = probabilité_t
