@@ -313,19 +313,6 @@ class HMM:
 
         :type m0: HMM
         """
-        gammas = []
-        epsilons = []
-        for j, w in enumerate(s):
-            f = m0.genere_f(w)
-            b = m0.genere_b(w)
-            #Je suis beaucoup trop fier de ces deux lignes
-            gamma =
-            epsilon =  HMM.epsilon(m0, w, f, b)
-            gammas.append(gamma)
-            epsilons.append(epsilon)
-        epsilons = np.array(epsilons)
-        gammas = np.array(gammas)
-
         pi = np.zeros(m0.nbs)
         T = np.zeros(m0.nbs, m0.nbs)
         O = np.zeros(m0.nbs, m0.nbl)
@@ -335,20 +322,13 @@ class HMM:
             epsilon = HMM.epsilon(m0, w, f, b)
             gamma = HMM.gamma(f, b)
             pi += gamma[:,1]
-            T += epsilons
+            T += np.einsum('klt->kl', epsilon)
+            condl = np.zeros(len(w))
+            for o in range(m0.nbl):
+                for t in range(len(w)):
+                    if w[t] == o:
+                        O[:, o] += gamma[:, t]
 
-
-
-        pi = gamma[:, 1]
-        T = epsilons[0][0]
-        for t in range(1, len(s[0]) - 1):
-            T += epsilons[0][t]
-        for j in range(1, len(s)):
-            for t in range(len(s[j]) - 1):
-                T += epsilons[j][t]
-        pi = gammas[0][:, 1]
-        for j in range(1, len(s)):
-            pi += gammas[j][:, 1]
 
         z_t = np.einsum('kj->j', T)
         T = T / z_t
