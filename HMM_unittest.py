@@ -68,13 +68,13 @@ class HMMTest(unittest.TestCase):
         np.testing.assert_allclose(h.transitions,np.array([[ 0.9375,0.0625 ], [ 0.15625, 0.84375]]))
         np.testing.assert_allclose(h.emissions,np.array([[ 0.48,0.52], [ 0.52336449, 0.47663551]]))
 
-    def test_epsilon(self):
+    def test_xi(self):
         H = self.A
         w = [1, 0]
         f = H.genere_f(w)
         b = H.genere_b(w)
-        epsilon = HMM.HMM.epsilon(H, w, f, b)
-        self.assertAlmostEqual(epsilon[0, 1, 0], 0.07543103448)
+        xi = HMM.HMM.xi(H, w, f, b)
+        self.assertAlmostEqual(xi[0, 1, 0], 0.07543103448)
 
     def tearDown(self):
         self.A = None
