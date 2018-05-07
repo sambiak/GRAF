@@ -144,7 +144,7 @@ class HMM:
         self.__emissions = emissions
 
     @staticmethod
-    def __ligns_not_comments(adr):
+    def __lignes_moins_commentaire(adr):
         """
         :param adr: Adresse du fichier contenant la sauvegarde
         :return: Un itérateur contenant les lignes du fichier moins les lignes commençant par #
@@ -162,12 +162,14 @@ class HMM:
         :param adr: l'adresse d'un fichier représentant un HMM
         :return: le HMM représenté dans le fichier
         """
-        lines = HMM.__ligns_not_comments(adr)
-        nbl = int(next(lines))
-        nbs = int(next(lines))
-        initial = [float(next(lines)) for _ in range(nbs)]
-        transitions = [[j for j in map(float, next(lines).split())] for _ in range(nbs)]
-        emmissions = [[j for j in map(float, next(lines).split())] for _ in range(nbl)]
+        lignes = HMM.__lignes_moins_commentaire(adr)
+        # Comme les fichiers ont toujours la même configuration moins les commentaires
+        # On s'at
+        nbl = int(next(lignes))
+        nbs = int(next(lignes))
+        initial = [float(next(lignes)) for _ in range(nbs)]
+        transitions = [[j for j in map(float, next(lignes).split())] for _ in range(nbs)]
+        emmissions = [[j for j in map(float, next(lignes).split())] for _ in range(nbl)]
         return HMM(nbl, nbs, np.array(initial).T, np.array(transitions), np.array(emmissions))
 
 # Exo 11 question 4
@@ -200,21 +202,22 @@ class HMM:
 # Exo 11 question 3
 
     @staticmethod
-    def draw_multinomial(L):
+    def draw_multinomial(l):
         """
 
-        :param L: une liste de probabilités (sommant à 1)
-        :return: un indice i avec une probabilité de L[i]
+        :param l: une liste de probabilités (sommant à 1)
+        :return: un indice i avec une probabilité de l[i]
         """
+        # x est une variable aléatoire comprise entre 0 et 1 suivant une distribution continue uniforme
         x = rd.random()
-        M = []
+        somme_l = []
         somme = 0
-        for i in range(len(L)):
-            M += [somme]
-            somme += L[i]
-        M += [somme]
-        for i in range(len(M) - 1):
-            if M[i] <= x <= M[i+1]:
+        for i in range(len(l)):
+            somme_l += [somme]
+            somme += l[i]
+        somme_l += [somme]
+        for i in range(len(somme_l) - 1):
+            if somme_l[i] <= x <= somme_l[i+1]:
                 return i
 
     def gen_rand(self, n):
@@ -309,7 +312,7 @@ class HMM:
 
                 for s in range(self.nbs):
                     probabilité_t = chemins[s][1]*self.emissions[(s, w[i])]
-                    if i < (len(w) - 1) :
+                    if i < (len(w) - 1):
                         probabilité_t *= self.transitions[(s, k)]
                     if probabilité_t >= probabilité:
                         chemin = (chemins[s][0] + [s], probabilité_t)
@@ -436,12 +439,12 @@ class HMM:
                     if w[t] == o:
                         O[:, o] += gamma[:, t]
 
-        #Normalisation
+        # Normalisation
         pi /= pi.sum()
         for line in T:
             line /= line.sum()
         for line in O:
-            line/= line.sum()
+            line /= line.sum()
 
         return HMM(m0.nbl, m0.nbs, pi, T, O)
 
