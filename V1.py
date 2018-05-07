@@ -324,13 +324,13 @@ class HMM:
         epsilons = np.array(epsilons)
         gammas = np.array(gammas)
         pi = gamma[:, 1]
-        z_t = np.array([1 for _ in range(m0.nbs)])
         T = epsilons[0][0]
         for t in range(1, len(s[0]) - 1):
             T += epsilons[0][t]
         for j in range(1, len(s)):
             for t in range(len(s[j]) - 1):
                 T += epsilons[j][t]
+        z_t = np.einsum('kj->j', T)
         T = T/z_t
         pi = gammas[0][:, 1]
         for j in range(1, len(s)):
