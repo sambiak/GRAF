@@ -31,8 +31,8 @@ class HMM:
     @nbl.setter
     def nbl(self, nbl):
         """
-        La fonction modifie le nombre d'états.
-        :param nbl: Le nombre d'états
+        La fonction modifie le nombre de lettres.
+        :param nbl: Le nombre de lettres
         :return: None
         """
         if not isinstance(nbl, int):
@@ -43,10 +43,18 @@ class HMM:
 
     @property
     def nbs(self):
+        """
+        :return: Le nombre d'états
+        """
         return self.__nbs
 
     @nbs.setter
     def nbs(self, nbs):
+        """
+        La fonction modifie le nombre d'états.
+        :param nbs: Le nombre d'états
+        :return: None
+        """
         if not isinstance(nbs, int):
             raise TypeError("nbl doit être entier")
         if nbs <= 0:
@@ -55,10 +63,17 @@ class HMM:
 
     @property
     def initial(self):
+        """
+        :return: Le vecteur initial
+        """
         return self.__initial
 
     @initial.setter
     def initial(self, initial):
+        """
+        :param initial: Le vecteur initial
+        :return: None
+        """
         if not isinstance(initial, np.ndarray):
             raise TypeError("initial doit être un array numpy")
         if np.shape(initial) != (self.nbs, ):
