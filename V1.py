@@ -406,7 +406,10 @@ class HMM:
     def BW1(m0, s):
         """
 
+        :param m0:un HMM à mettre à jour pour augmenter la vraissemblance de s
         :type m0: HMM
+        :param s: une liste de mots potentiellements générés par m0
+        :return: la mise à jour de m0
         """
         pi = np.zeros(m0.nbs)
         T = np.zeros((m0.nbs, m0.nbs))
