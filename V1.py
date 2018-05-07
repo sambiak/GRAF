@@ -205,6 +205,11 @@ class HMM:
         return S, O
 
     def genere_f(self, w):
+        """
+
+        :param w: un mot généré par self
+        :return: la matrice des f(k, i), calculés parla méthode forward
+        """
         f = np.zeros((len(w), self.nbs))
         f[0] = self.initial*self.emissions[:, w[0]]
         for i in range(1, len(w)):
@@ -227,6 +232,11 @@ class HMM:
         return F.sum()
 
     def genere_b(self, w):
+        """
+
+        :param w: un mot généré par self
+        :return: la matrice des b(k, i), calculés parla méthode backward
+        """
         assert len(w) != 0
 
         b = np.ones((self.nbs, len(w)))
