@@ -24,7 +24,7 @@ class HMM:
     @property
     def nbl(self):
         """
-        :return: Le nombre d'états
+        :return: Le nombre d'étatse lettres
         """
         return self.__nbl
 
