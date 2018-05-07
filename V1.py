@@ -298,10 +298,19 @@ class HMM:
     def epsilon(m0, w, f, b):
         epsilon = []
         for t in range(len(w) - 1):
-            dénominateur = np.einsum('k,kl,l,l->', f[:, t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
-            numérateur = f[:, t] * m0.transitions * (m0.emissions[:, w[t + 1]] * b[:, t + 1]).T
-            epsilon.append(numérateur / dénominateur)
+            denominateur = np.einsum('k,kl,l,l->', f[:, t], m0.transitions, m0.emissions[:, w[t + 1]], b[:, t + 1])
+            numerateur = f[:, t] * m0.transitions * (m0.emissions[:, w[t + 1]] * b[:, t + 1]).T
+            epsilon.append(numerateur / denominateur)
         return np.array(epsilon)
+
+    @staticmethod
+    def xi(m0, w, f, b):
+        xi = []
+        for t, o in enumerate(w):
+
+
+
+        return
 
     @staticmethod
     def gamma(f, b):
@@ -387,3 +396,24 @@ class HMM:
         for i in range(m):
             mlijhdfsk += [HMM.BW2(nbs, nbl, [w], n)]
         return max(mlijhdfsk, key=lambda x: x.pfw(w))
+
+    def xi2(self, w):
+        """
+        :param w: tuple d'observable
+        :return: Matrice de dimension nb_d'etats * nb_d'etats * len(w) correspondant au xi du polycopié 4.4, sans boucle
+        """
+        f = self.genere_f(w)[:, :-1]
+        b = self.genere_b(w)[:, 1:]
+        emissions = self.emissions[:, w[1:]]
+        xi = np.einsum('kt,kl,lt,lt->klt', f, self.transitions, emissions, b)
+        v = np.einsum('kt,kl,lt,lt->t', f, self.transitions, emissions, b)
+        somme = np.tile(v, (self.nbs, self.nbs, 1))
+        xi = xi / somme
+        return xi
+
+H = HMM.load('save1.txt')
+w = [1, 0]
+f = H.genere_f(w)
+b = H.genere_b(w)
+print(HMM.epsilon(H, w, f, b))
+print(H.xi2(w))
