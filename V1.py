@@ -452,8 +452,8 @@ class HMM:
     def gen_HMM(nbs, nbl):
         """
 
-        :param nbs: le nombre d'états du HMM à générer
-        :param nbl: le nombre de lettres du HMM à générer
+        :param nbs: le nombre d'états du HMM à créer
+        :param nbl: le nombre de lettres du HMM à créer
         :return: un HMM généré aléatoirement
         """
         rd.seed()
@@ -492,6 +492,14 @@ class HMM:
 
     @staticmethod
     def BW2(nbs, nbl, S, N):
+        """
+
+        :param nbs: le nombre d'états du HMM à créer
+        :param nbl: le nomre de lettres du HMM à créer
+        :param S: une liste de mots pour laquelle on veut créer un HMM pour lequel la vraissemblance de S est grande
+        :param N: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :return: un HMM pour lequel la vraisemblance de S est très grande
+        """
         M = HMM.gen_HMM(nbs, nbl)
         for i in range(N):
             M = HMM.BW1(M, S)
