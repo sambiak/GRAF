@@ -335,6 +335,11 @@ class HMM:
         return res
 
     def pviterbi_w(self, w):
+        """
+
+        :param w: Un mot généré par self
+        :return: La probabilité du chemin de viterbi sachant que w a été généré
+        """
         v = self.viterbi(w)
         p = self.pfw(w)
         pwv = self.initial[v[0]]
