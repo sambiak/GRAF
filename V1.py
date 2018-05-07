@@ -163,8 +163,8 @@ class HMM:
         :return: le HMM représenté dans le fichier
         """
         lignes = HMM.__lignes_moins_commentaire(adr)
-        # Comme les fichiers ont toujours la même configuration moins les commentaires
-        # On s'at
+        # Comme les fichiers ont toujours la même configuration moins les commentaires,
+        # on a juste à organiser les données dans les matrices
         nbl = int(next(lignes))
         nbs = int(next(lignes))
         initial = [float(next(lignes)) for _ in range(nbs)]
@@ -175,7 +175,7 @@ class HMM:
 # Exo 11 question 4
     def save(self, adr='HMM.txt'):
         """
-
+        Sauvegarde un HMM.
         :param adr: l'adresse où enregistrer le HMM self
         :return: None
         """
@@ -419,7 +419,7 @@ class HMM:
         i-ème observation de w et que l'état final soit k
         :param b: La matrice des b[k, i] qui sont les probabilités de générer w[i:] en partant de l'état k
         :return: Une matrice de probabilités telle que gamma[k,t] soit la probabilité que le t-ième état soit k en
-        connaissant le mot
+        connaissant le mot.
         """
         return (f * b) / np.einsum('ki,ki->i', f, b)
 
