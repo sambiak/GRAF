@@ -7,15 +7,18 @@ class HMM:
     """ Define an HMM"""
 
     def __init__(self, nbl, nbs, initial, transitions, emissions):
-        # The number of letters
+        """
+
+        :param nbl: nombre de lettres
+        :param nbs: nombre d'états
+        :param initial: les probabilitées d'entrée dans le HMM
+        :param transitions: les probabilitées de transition à l'intérieur du HMM
+        :param emissions: les probabilitées d'émissions dans un HMM
+        """
         self.nbl = nbl
-        # The number of states
         self.nbs = nbs
-        # The vector defining the initial weights
         self.initial = initial
-        # The array defining the transitions
         self.transitions = transitions
-        # The list of vectors defining the emissions
         self.emissions = emissions
 
     @property
@@ -107,8 +110,7 @@ class HMM:
     def __ligns_not_comments(adr):
         """
         :param adr: Adresse du fichier contenant la sauvegarde
-        :return: Un itérateur contenant les lignes du fichier moins les lignes
-        commencant par #
+        :return: Un itérateur contenant les lignes du fichier moins les lignes commençant par #
         """
         with open(adr, "r") as f:
             for line in f:
