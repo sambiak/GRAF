@@ -331,8 +331,8 @@ class HMM:
 
         #Normalisation
         pi = pi/m0.nbs
-        T = T/ np.einsum('kj->j', T)
-        O = O/ np.einsum('ko -> o', O)
+        T = T/ np.einsum('kj->k', T)
+        O = O/ np.einsum('ko -> k', O)
 
         return HMM(m0.nbl, m0.nbs, pi, T, O)
 
