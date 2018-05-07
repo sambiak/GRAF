@@ -319,7 +319,7 @@ class HMM:
         """
 
         :param w: un mot généré par self
-        :return:
+        :return: la probabilité de w le long de son chemin de viterbi
         """
         v = self.viterbi(w)
         res = 1
@@ -338,6 +338,12 @@ class HMM:
 
 # Exo 16
     def nbviterbi(self, w, s):
+        """
+
+        :param w: un mot généré par self
+        :param s: la liste des états cachés ayant généré w
+        :return: le nombre d'états identiques dans s et dans le chemin de viterbi de w
+        """
         v = self.viterbi(w)
         nb = 0
         for i in range(len(w)):
@@ -356,6 +362,11 @@ class HMM:
         return P.index(max(P))
 
     def log_vraissemblance(self, S):
+        """
+
+        :param S: une liste de mots potentiellements générés par self
+        :return: le logarithme de la vraissemblance de self
+        """
         res = 0
         for w in S:
             res += np.emath.log(self.pfw(w))
