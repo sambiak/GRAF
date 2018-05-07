@@ -119,10 +119,17 @@ class HMM:
 
     @property
     def emissions(self):
+        """
+        :return: Les proabilités d'émissions dans un HMM
+        """
         return self.__emissions
 
     @emissions.setter
     def emissions(self, emissions):
+        """
+        :param emissions: Les probabilités d'émissions dans un HMM
+        :return: None
+        """
         if not isinstance(emissions, np.ndarray):
             raise TypeError("emissions doit être un array numpy")
         if np.shape(emissions) != (self.nbs, self.nbl):
