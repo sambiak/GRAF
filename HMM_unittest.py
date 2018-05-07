@@ -80,5 +80,78 @@ class HMMTest(unittest.TestCase):
         self.A = None
         self.B = None
 
+    def test_save1(self):
+        t1 = HMM.HMM.load("save1.txt")
+        t1.save()
+    ####################################################################
+    # Test Multinomial
+    ####################################################################
+
+    def test_draw_multinomial(self):
+        self.assertEqual(0, HMM.HMM.draw_multinomial(np.array([1, 0, 0])))
+    ####################################################################
+    # Test Rand
+    ####################################################################
+
+    def test_gen_rand(self):
+        M = HMM.HMM.load('save3.txt')
+        self.assertEqual([0, 1, 2, 0, 1, 2, 0, 1, 2], M.gen_rand(8)[0])
+
+    ####################################################################
+    # Test PFW
+    ####################################################################
+
+    def test_pfw(self):
+        M = HMM.HMM.load('save3.txt')
+        self.assertEqual(1, M.pfw([0, 1, 2]))
+
+    def test_pfw2(self):
+        M = HMM.HMM.load('save2.txt')
+        self.assertEqual(0.5, M.pfw([0, 1, 2]))
+
+    ####################################################################
+    # Test PBW
+    ####################################################################
+
+    def test_pbw(self):
+        M = HMM.HMM.load('save3.txt')
+        self.assertEqual(1, M.pbw([0, 1, 2]))
+
+    def test_pbw2(self):
+        M = HMM.HMM.load('save2.txt')
+        self.assertEqual(0.5, M.pbw([0, 1, 2]))
+
+    ####################################################################
+    # Test Predit
+    ####################################################################
+
+    def test_predit2(self):
+        M = HMM.HMM.load('save3.txt')
+        self.assertEqual(0, M.predit([0, 1, 2]))
+
+    def test_predit3(self):
+        M = HMM.HMM.load('save3.txt')
+        self.assertEqual(1, M.predit([0]))
+
+    def test_predit4(self):
+        M = HMM.HMM.load('save4.txt')
+        self.assertEqual(2, M.predit([0, 1]))
+
+    def test_predit5(self):
+        M = HMM.HMM.load('save4.txt')
+        self.assertEqual(0, M.predit([0, 1, 1]))
+
+    ####################################################################
+    # Test Viterbi
+    ####################################################################
+
+    def test_viterbi(self):
+        M = HMM.HMM.load('save3.txt')
+        self.assertEqual(([0, 1, 2], np.emath.log(1.0)), M.viterbi([0, 1, 2]))
+
+    def test_viterbi2(self):
+        M = HMM.HMM.load('save2.txt')
+        self.assertEqual(([0, 1, 2], np.emath.log(0.5)), M.viterbi([0, 1, 2]))
+
 if __name__ == "__main__":
     unittest.main()  
