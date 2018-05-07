@@ -316,6 +316,11 @@ class HMM:
 
 # Exo 15
     def pw_viterbi(self, w):
+        """
+
+        :param w: un mot généré par self
+        :return:
+        """
         v = self.viterbi(w)
         res = 1
         for i in range(len(w)):
@@ -444,8 +449,8 @@ class HMM:
 
     @staticmethod
     def BW3(nbs, nbl, w, n, m):
-        mlijhdfsk = [] #serieux ça fait quoi ce machin
+        hmm_possibles = [] #serieux ça fait quoi ce machin
         for i in range(m):
-            mlijhdfsk += [HMM.BW2(nbs, nbl, [w], n)]
-        return max(mlijhdfsk, key=lambda x: x.pfw(w))
+            hmm_possibles += [HMM.BW2(nbs, nbl, [w], n)]
+        return max(hmm_possibles, key=lambda x: x.pfw(w))
 
