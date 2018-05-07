@@ -207,7 +207,6 @@ class HMM:
 
     def pbw(self, w):
         """
-
         :param w: séquence générée par le HMM self
         :return: la probabilité que self génère cette séquence
         """
@@ -304,6 +303,9 @@ class HMM:
             epsilon.append(numérateur / dénominateur)
         return np.array(epsilon)
 
+    @staticmethod
+    def gamma(f, b):
+        return (f * b) / np.einsum('ki,ki->i', f, b)
 
     @staticmethod
     def BW1(m0, s):
@@ -317,7 +319,7 @@ class HMM:
             f = m0.genere_f(w)
             b = m0.genere_b(w)
             #Je suis beaucoup trop fier de ces deux lignes
-            gamma = (f*b)/np.einsum('ki,ki->i', f, b)
+            gamma =
             epsilon =  HMM.epsilon(m0, w, f, b)
             gammas.append(gamma)
             epsilons.append(epsilon)
@@ -383,7 +385,7 @@ class HMM:
 
     @staticmethod
     def BW3(nbs, nbl, w, n, m):
-        mlijhdfsk = []
+        mlijhdfsk = [] #serieux ça fait quoi ce machin
         for i in range(m):
             mlijhdfsk += [HMM.BW2(nbs, nbl, [w], n)]
         return max(mlijhdfsk, key=lambda x: x.pfw(w))
