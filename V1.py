@@ -24,7 +24,7 @@ class HMM:
     @property
     def nbl(self):
         """
-        :return: Le nombre d'étatse lettres
+        :return: Le nombre de lettres
         """
         return self.__nbl
 
@@ -64,14 +64,14 @@ class HMM:
     @property
     def initial(self):
         """
-        :return: Le vecteur initial
+        :return: Les probabilités d'entrée dans le HMM
         """
         return self.__initial
 
     @initial.setter
     def initial(self, initial):
         """
-        :param initial: Le vecteur initial
+        :param initial: Les probabilités d'entrée dans le HMM
         :return: None
         """
         if not isinstance(initial, np.ndarray):
@@ -90,10 +90,17 @@ class HMM:
 
     @property
     def transitions(self):
+        """
+        :return: Les probabilités de transition à l'intérieur du HMM
+        """
         return self.__transitions
 
     @transitions.setter
     def transitions(self, transitions):
+        """
+        :param transitions: Les probabilités de transition à l'intérieur du HMM
+        :return: None
+        """
         if not isinstance(transitions, np.ndarray):
             raise TypeError("transitions doit être un array numpy")
         if np.shape(transitions) != (self.nbs, self.nbs):
