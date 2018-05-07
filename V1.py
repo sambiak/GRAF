@@ -321,7 +321,7 @@ class HMM:
             b = m0.genere_b(w)
             epsilon = HMM.epsilon(m0, w, f, b)
             gamma = HMM.gamma(f, b)
-            pi += gamma[:,1]
+            pi += gamma[:,0]
             T += np.einsum('klt->kl', epsilon)
             for o in range(m0.nbl):
                 for t in range(len(w)):
@@ -330,9 +330,11 @@ class HMM:
 
 
         #Normalisation
-        pi = pi/pi.sum()
-        T = T/ np.einsum('kj->k', T)
-        O = O/ np.einsum('ko -> k', O)
+        pi /= pi.sum()
+        for line in T:
+            line /= line.sum()
+        for line in O:
+            line/= line.sum()
 
         return HMM(m0.nbl, m0.nbs, pi, T, O)
 
