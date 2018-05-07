@@ -237,7 +237,7 @@ class HMM:
         """
 
         :param w: un mot généré par self
-        :return: la matrice des f(k, i), calculés parla méthode forward
+        :return: La matrice des f[k,i] qui sont les probabilités de générer w[:,i+1] en finissant sur l'état k
         """
         f = np.zeros((len(w), self.nbs))
         f[0] = self.initial*self.emissions[:, w[0]]
@@ -264,7 +264,7 @@ class HMM:
         """
 
         :param w: un mot généré par self
-        :return: la matrice des b(k, i), calculés parla méthode backward
+        :return: la matrice des b[k, i] qui sont les probabilités de générer w[i:] en partant de l'état k
         """
         assert len(w) != 0
 
@@ -391,6 +391,16 @@ class HMM:
 
     @staticmethod
     def xi(m0, w, f, b):
+        """
+
+        :param m0: Le HMM que l'on veut modifier
+        :param w: Un mot généré par self
+        :param f: Une matrice de probabilités organisée de la manière suivante: f[k,i] est la probabilité d'arriver à la
+        i-ème observation de w et que l'état final soit k
+        :param b: La matrice des b[k, i] qui sont les probabilités de générer w[i:] en partant de l'état k
+        :return: Une matrice de probabilités organisée de la manière suivante: xi[k,l,t] est la probabilité que le
+        t-ième état soit k et que le t+1 ème état soit l, sachant que w est généré
+        """
         f = f[:, :-1]
         b = b[:, 1:]
         emission = m0.emissions[:, w[1:]]
