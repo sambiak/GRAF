@@ -491,22 +491,32 @@ class HMM:
         return HMM(nbl, nbs, initial, transitions, emissions)
 
     @staticmethod
-    def BW2(nbs, nbl, S, N):
+    def BW2(nbs, nbl, s, n):
         """
 
         :param nbs: le nombre d'états du HMM à créer
         :param nbl: le nomre de lettres du HMM à créer
-        :param S: une liste de mots pour laquelle on veut créer un HMM pour lequel la vraissemblance de S est grande
-        :param N: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
-        :return: un HMM pour lequel la vraisemblance de S est très grande
+        :param s: une liste de mots pour laquelle on veut créer un HMM pour lequel la vraissemblance de S est grande
+        :param n: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :return: un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
         """
         M = HMM.gen_HMM(nbs, nbl)
-        for i in range(N):
-            M = HMM.BW1(M, S)
+        for i in range(n):
+            M = HMM.BW1(M, s)
         return M
 
     @staticmethod
     def BW3(nbs, nbl, w, n, m):
+        """
+
+        :param nbs: le nombre d'états du HMM à créer
+        :param nbl: le nombre de lettres du HMM à créer
+        :param w: un mot pour lequel on veut créer un HMM pour lequel la vraissemblance de w est grande
+        :param n: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :param m: le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
+        vraissemblance de w est la plus grande
+        :return: un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
+        """
         hmm_possibles = []
         for i in range(m):
             hmm_possibles += [HMM.BW2(nbs, nbl, [w], n)]
