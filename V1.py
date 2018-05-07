@@ -329,9 +329,12 @@ class HMM:
                         O[:, o] += gamma[:, t]
 
 
-        z_t = np.einsum('kj->j', T)
-        T = T / z_t
-            #
+        #Normalisation
+        pi = pi/m0.nbs
+        T = T/ np.einsum('kj->j', T)
+        O = O/ np.einsum('ko -> o', O)
+
+        return HMM(m0.nbl, m0.nbs, pi, T, O)
 
     @staticmethod
     def gen_HMM(nbs, nbl):
