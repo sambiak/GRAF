@@ -413,6 +413,14 @@ class HMM:
 
     @staticmethod
     def gamma(f, b):
+        """
+
+        :param f: Une matrice de probabilités organisée de la manière suivante: f[k,i] est la probabilité d'arriver à la
+        i-ème observation de w et que l'état final soit k
+        :param b: La matrice des b[k, i] qui sont les probabilités de générer w[i:] en partant de l'état k
+        :return: Une matrice de probabilités telle que gamma[k,t] soit la probabilité que le t-ième état soit k en
+        connaissant le mot
+        """
         return (f * b) / np.einsum('ki,ki->i', f, b)
 
     @staticmethod
