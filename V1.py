@@ -11,9 +11,9 @@ class HMM:
 
         :param nbl: nombre de lettres
         :param nbs: nombre d'états
-        :param initial: les probabilitées d'entrée dans le HMM
-        :param transitions: les probabilitées de transition à l'intérieur du HMM
-        :param emissions: les probabilitées d'émissions dans un HMM
+        :param initial: les probabilités d'entrée dans le HMM
+        :param transitions: les probabilités de transition à l'intérieur du HMM
+        :param emissions: les probabilités d'émissions dans un HMM
         """
         self.nbl = nbl
         self.nbs = nbs
@@ -143,6 +143,11 @@ class HMM:
 # Exo 11 question 2
     @staticmethod
     def load(adr):
+        """
+
+        :param adr: l'adresse d'un fichier représentant un HMM
+        :return: le HMM représenté dans le fichier
+        """
         lines = HMM.__ligns_not_comments(adr)
         nbl = int(next(lines))
         nbs = int(next(lines))
@@ -153,6 +158,11 @@ class HMM:
 
 # Exo 11 question 4
     def save(self, adr='HMM.txt'):
+        """
+
+        :param adr: l'adresse où enregistrer le HMM self
+        :return: None
+        """
         fichier = open(adr, "w")
         fichier.write("# The number of letters \n")
         fichier.write(str(self.nbl))
@@ -177,6 +187,11 @@ class HMM:
 
     @staticmethod
     def draw_multinomial(L):
+        """
+
+        :param L: une liste de probabilités (sommant à 1)
+        :return: un indice i avec une probabilité de L[i]
+        """
         x = rd.random()
         M = []
         somme = 0
@@ -189,6 +204,11 @@ class HMM:
                 return i
 
     def gen_rand(self, n):
+        """
+
+        :param n: longueur du mot à générer
+        :return: un mot généré à partir du HMM self
+        """
         rd.seed()
         s = HMM.draw_multinomial(self.initial)
         S = [s]
