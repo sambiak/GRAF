@@ -1,4 +1,4 @@
-from V1 import *
+from HMM_classe import *
 import numpy as np
 
 import unittest

@@ -5,7 +5,7 @@
 #
 
 import numpy as np
-import V1 as HMM
+import HMM_classe as HMM
 
 
 def sequence(adr):

@@ -6,7 +6,7 @@ import numpy as np
 import unittest
 import math
 
-import V1 as HMM
+import HMM_classe as HMM
 
 class HMMTest(unittest.TestCase):
     def setUp(self):
@@ -154,4 +154,4 @@ class HMMTest(unittest.TestCase):
         self.assertEqual(([0, 1, 2], np.emath.log(0.5)), M.viterbi([0, 1, 2]))
 
 if __name__ == "__main__":
-    unittest.main()  
+    unittest.main()
