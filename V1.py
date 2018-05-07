@@ -323,7 +323,6 @@ class HMM:
             gamma = HMM.gamma(f, b)
             pi += gamma[:,1]
             T += np.einsum('klt->kl', epsilon)
-            condl = np.zeros(len(w))
             for o in range(m0.nbl):
                 for t in range(len(w)):
                     if w[t] == o:
