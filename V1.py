@@ -128,6 +128,11 @@ class HMM:
 # Exo 11 question 2
     @staticmethod
     def load(adr):
+        """
+
+        :param adr: l'adresse d'un fichier représentant un HMM
+        :return: le HMM représenté dans le fichier
+        """
         lines = HMM.__ligns_not_comments(adr)
         nbl = int(next(lines))
         nbs = int(next(lines))
@@ -138,6 +143,11 @@ class HMM:
 
 # Exo 11 question 4
     def save(self, adr='HMM.txt'):
+        """
+
+        :param adr: l'adresse où enregistrer le HMM self
+        :return: None
+        """
         fichier = open(adr, "w")
         fichier.write("# The number of letters \n")
         fichier.write(str(self.nbl))
