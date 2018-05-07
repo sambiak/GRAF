@@ -314,8 +314,8 @@ class HMM:
         :type m0: HMM
         """
         pi = np.zeros(m0.nbs)
-        T = np.zeros(m0.nbs, m0.nbs)
-        O = np.zeros(m0.nbs, m0.nbl)
+        T = np.zeros((m0.nbs, m0.nbs))
+        O = np.zeros((m0.nbs, m0.nbl))
         for w in s:
             f = m0.genere_f(w)
             b = m0.genere_b(w)
