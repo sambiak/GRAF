@@ -437,6 +437,12 @@ class HMM:
 
     @staticmethod
     def gen_HMM(nbs, nbl):
+        """
+
+        :param nbs: le nombre d'états du HMM à générer
+        :param nbl: le nombre de lettres du HMM à générer
+        :return: un HMM généré aléatoirement
+        """
         rd.seed()
         somme = 0
         initial = []
@@ -480,7 +486,7 @@ class HMM:
 
     @staticmethod
     def BW3(nbs, nbl, w, n, m):
-        hmm_possibles = [] #serieux ça fait quoi ce machin
+        hmm_possibles = []
         for i in range(m):
             hmm_possibles += [HMM.BW2(nbs, nbl, [w], n)]
         return max(hmm_possibles, key=lambda x: x.pfw(w))
