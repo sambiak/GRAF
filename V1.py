@@ -323,6 +323,20 @@ class HMM:
             epsilons.append(epsilon)
         epsilons = np.array(epsilons)
         gammas = np.array(gammas)
+
+        pi = np.zeros(m0.nbs)
+        T = np.zeros(m0.nbs, m0.nbs)
+        O = np.zeros(m0.nbs, m0.nbl)
+        for w in s:
+            f = m0.genere_f(w)
+            b = m0.genere_b(w)
+            epsilon = HMM.epsilon(m0, w, f, b)
+            gamma = HMM.gamma(f, b)
+            pi += gamma[:,1]
+            T += epsilons
+
+
+
         pi = gamma[:, 1]
         T = epsilons[0][0]
         for t in range(1, len(s[0]) - 1):
@@ -330,12 +344,12 @@ class HMM:
         for j in range(1, len(s)):
             for t in range(len(s[j]) - 1):
                 T += epsilons[j][t]
-        z_t = np.einsum('kj->j', T)
-        T = T/z_t
         pi = gammas[0][:, 1]
         for j in range(1, len(s)):
             pi += gammas[j][:, 1]
 
+        z_t = np.einsum('kj->j', T)
+        T = T / z_t
             #
 
     @staticmethod
