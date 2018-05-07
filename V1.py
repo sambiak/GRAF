@@ -119,10 +119,17 @@ class HMM:
 
     @property
     def emissions(self):
+        """
+        :return: Les proabilités d'émissions dans un HMM
+        """
         return self.__emissions
 
     @emissions.setter
     def emissions(self, emissions):
+        """
+        :param emissions: Les probabilités d'émissions dans un HMM
+        :return: None
+        """
         if not isinstance(emissions, np.ndarray):
             raise TypeError("emissions doit être un array numpy")
         if np.shape(emissions) != (self.nbs, self.nbl):
@@ -245,13 +252,13 @@ class HMM:
         :return: la probabilité que self génère cette séquence
         """
         n = len(w)
-        F = []
+        f = []
         for k in range(self.nbs):
-            F += [self.initial[k]*self.emissions[k, w[0]]]
-        F = np.array(F)
+            f += [self.initial[k]*self.emissions[k, w[0]]]
+        f = np.array(f)
         for i in range(1, n):
-            F = (F  @ self.transitions)*self.emissions[:, w[i]]
-        return F.sum()
+            f = (f  @ self.transitions)*self.emissions[:, w[i]]
+        return f.sum()
 
     def genere_b(self, w):
         """
@@ -328,6 +335,11 @@ class HMM:
         return res
 
     def pviterbi_w(self, w):
+        """
+
+        :param w: Un mot généré par self
+        :return: La probabilité du chemin de viterbi sachant que w a été généré
+        """
         v = self.viterbi(w)
         p = self.pfw(w)
         pwv = self.initial[v[0]]
@@ -353,6 +365,11 @@ class HMM:
 
 # Exo 13
     def predit(self, w):
+        """
+
+        :param w: Un mot généré par self
+        :return: La lettre qui a la plus forte probabilité d'être générée
+        """
         H = self.initial
         for i in range(len(w)):
             H = (self.transitions.T*self.emissions[:, w[i]].T) @ H
@@ -399,7 +416,7 @@ class HMM:
             b = m0.genere_b(w)
             xi = HMM.xi(m0, w, f, b)
             gamma = HMM.gamma(f, b)
-            pi += gamma[:,0]
+            pi += gamma[:, 0]
             T += np.einsum('klt->kl', xi)
             for o in range(m0.nbl):
                 for t in range(len(w)):
@@ -418,34 +435,34 @@ class HMM:
     @staticmethod
     def gen_HMM(nbs, nbl):
         rd.seed()
-        sum = 0
+        somme = 0
         initial = []
         for i in range(nbs):
             x = rd.random()
             initial += [x]
-            sum += x
+            somme += x
         for i in range(nbs):
-            initial[i] /= sum
+            initial[i] /= somme
         transitions = []
         for j in range(nbs):
             transitions += [[]]
-            sum = 0
+            somme = 0
             for i in range(nbs):
                 x = rd.random()
                 transitions[j] += [x]
-                sum += x
+                somme += x
             for i in range(nbs):
-                transitions[j][i] /= sum
+                transitions[j][i] /= somme
         emissions = []
         for j in range(nbs):
             emissions += [[]]
-            sum = 0
+            somme = 0
             for i in range(nbl):
                 x = rd.random()
                 emissions[j] += [x]
-                sum += x
+                somme += x
             for i in range(nbl):
-                emissions[j][i] /= sum
+                emissions[j][i] /= somme
         initial = np.array(initial)
         transitions = np.array(transitions)
         emissions = np.array(emissions)
