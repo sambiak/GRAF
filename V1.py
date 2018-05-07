@@ -530,3 +530,20 @@ class HMM:
             hmm_possibles += [HMM.BW2(nbs, nbl, [w], n)]
         return max(hmm_possibles, key=lambda x: x.pfw(w))
 
+    @staticmethod
+    def BW4(nbs, nbl, s, n, m):
+        """
+        identique à BW3, mais le cours nous demande de mettre en paramètre un seul mot, alors que le projet final va
+        l'utiliser sur une liste de mots
+        :param nbs: le nombre d'états du HMM à créer
+        :param nbl: le nombre de lettres du HMM à créer
+        :param w: une liste de mots pour lequel on veut créer un HMM pour lequel la vraissemblance de s est grande
+        :param n: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :param m: le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
+        vraissemblance de w est la plus grande
+        :return: un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
+        """
+        hmm_possibles = []
+        for i in range(m):
+            hmm_possibles += [HMM.BW2(nbs, nbl, s, n)]
+        return max(hmm_possibles, key=lambda x: x.log_vraissemblance(s))
