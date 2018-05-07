@@ -23,10 +23,18 @@ class HMM:
 
     @property
     def nbl(self):
+        """
+        :return: Le nombre d'états
+        """
         return self.__nbl
 
     @nbl.setter
     def nbl(self, nbl):
+        """
+        La fonction modifie le nombre d'états.
+        :param nbl: Le nombre d'états
+        :return: None
+        """
         if not isinstance(nbl, int):
             raise TypeError("nbl doit être entier")
         if nbl <= 0:
