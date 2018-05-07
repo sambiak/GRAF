@@ -359,6 +359,11 @@ class HMM:
 
 # Exo 13
     def predit(self, w):
+        """
+
+        :param w: Un mot généré par self
+        :return: La lettre qui a la plus forte probabilité d'être générée
+        """
         H = self.initial
         for i in range(len(w)):
             H = (self.transitions.T*self.emissions[:, w[i]].T) @ H
