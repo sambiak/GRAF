@@ -9,11 +9,11 @@ class HMM:
     def __init__(self, nbl, nbs, initial, transitions, emissions):
         """
 
-        :param nbl: nombre de lettres
-        :param nbs: nombre d'états
-        :param initial: les probabilités d'entrée dans le HMM
-        :param transitions: les probabilités de transition à l'intérieur du HMM
-        :param emissions: les probabilités d'émissions dans un HMM
+        :param nbl: Le nombre de lettres
+        :param nbs: Le nombre d'états
+        :param initial: Les probabilités d'entrée dans le HMM
+        :param transitions: Les probabilités de transition à l'intérieur du HMM
+        :param emissions: Les probabilités d'émissions dans un HMM
         """
         self.nbl = nbl
         self.nbs = nbs
@@ -44,6 +44,7 @@ class HMM:
     @property
     def nbs(self):
         """
+
         :return: Le nombre d'états
         """
         return self.__nbs
@@ -51,6 +52,7 @@ class HMM:
     @nbs.setter
     def nbs(self, nbs):
         """
+
         La fonction modifie le nombre d'états.
         :param nbs: Le nombre d'états
         :return: None
@@ -64,6 +66,7 @@ class HMM:
     @property
     def initial(self):
         """
+
         :return: Les probabilités d'entrée dans le HMM
         """
         return self.__initial
@@ -71,6 +74,7 @@ class HMM:
     @initial.setter
     def initial(self, initial):
         """
+
         :param initial: Les probabilités d'entrée dans le HMM
         :return: None
         """
@@ -91,6 +95,7 @@ class HMM:
     @property
     def transitions(self):
         """
+
         :return: Les probabilités de transition à l'intérieur du HMM
         """
         return self.__transitions
@@ -98,6 +103,7 @@ class HMM:
     @transitions.setter
     def transitions(self, transitions):
         """
+
         :param transitions: Les probabilités de transition à l'intérieur du HMM
         :return: None
         """
@@ -120,6 +126,7 @@ class HMM:
     @property
     def emissions(self):
         """
+
         :return: Les proabilités d'émissions dans un HMM
         """
         return self.__emissions
@@ -127,6 +134,7 @@ class HMM:
     @emissions.setter
     def emissions(self, emissions):
         """
+
         :param emissions: Les probabilités d'émissions dans un HMM
         :return: None
         """
@@ -146,6 +154,7 @@ class HMM:
     @staticmethod
     def __lignes_moins_commentaire(adr):
         """
+
         :param adr: Adresse du fichier contenant la sauvegarde
         :return: Un itérateur contenant les lignes du fichier moins les lignes commençant par #
         """
@@ -159,8 +168,8 @@ class HMM:
     def load(adr):
         """
 
-        :param adr: l'adresse d'un fichier représentant un HMM
-        :return: le HMM représenté dans le fichier
+        :param adr: L'adresse d'un fichier représentant un HMM
+        :return: Le HMM représenté dans le fichier
         """
         lignes = HMM.__lignes_moins_commentaire(adr)
         # Comme les fichiers ont toujours la même configuration moins les commentaires,
@@ -176,7 +185,8 @@ class HMM:
     def save(self, adr='HMM.txt'):
         """
         Sauvegarde un HMM.
-        :param adr: l'adresse où enregistrer le HMM self
+
+        :param adr: L'adresse où enregistrer le HMM self
         :return: None
         """
         fichier = open(adr, "w")
@@ -205,8 +215,8 @@ class HMM:
     def draw_multinomial(l):
         """
 
-        :param l: une liste de probabilités (sommant à 1)
-        :return: un indice i avec une probabilité de l[i]
+        :param l: Une liste de probabilités (sommant à 1)
+        :return: Un indice i avec une probabilité de l[i]
         """
         # x est une variable aléatoire comprise entre 0 et 1 suivant une distribution continue uniforme
         x = rd.random()
@@ -223,8 +233,8 @@ class HMM:
     def gen_rand(self, n):
         """
 
-        :param n: longueur du mot à générer
-        :return: un mot généré à partir du HMM self
+        :param n: Longueur du mot à générer
+        :return: Un mot généré à partir du HMM self
         """
         rd.seed()
         s = HMM.draw_multinomial(self.initial)
@@ -239,7 +249,7 @@ class HMM:
     def genere_f(self, w):
         """
 
-        :param w: un mot généré par self
+        :param w: Un mot généré par self
         :return: La matrice des f[k,i] qui sont les probabilités de générer w[:,i+1] en finissant sur l'état k
         """
         f = np.zeros((len(w), self.nbs))
@@ -251,8 +261,9 @@ class HMM:
 
     def pfw(self, w):
         """
-        :param w: séquence générée par le HMM self
-        :return: la probabilité que self génère cette séquence
+
+        :param w: Séquence générée par le HMM self
+        :return: La probabilité que self génère cette séquence
         """
         n = len(w)
         f = []
@@ -266,8 +277,8 @@ class HMM:
     def genere_b(self, w):
         """
 
-        :param w: un mot généré par self
-        :return: la matrice des b[k, i] qui sont les probabilités de générer w[i:] en partant de l'état k
+        :param w: Un mot généré par self
+        :return: La matrice des b[k, i] qui sont les probabilités de générer w[i:] en partant de l'état k
         """
         assert len(w) != 0
 
@@ -279,8 +290,9 @@ class HMM:
 
     def pbw(self, w):
         """
-        :param w: séquence générée par le HMM self
-        :return: la probabilité que self génère cette séquence
+
+        :param w: Séquence générée par le HMM self
+        :return: La probabilité que self génère cette séquence
         """
         b = self.genere_b(w)
         return np.einsum("k,k,k->", self.initial, self.emissions[:, w[0]], b[:,0])
@@ -289,10 +301,10 @@ class HMM:
     def viterbi(self, w):
         """
 
-        :param w: une séquence
+        :param w: Une séquence
         :return: Le chemin de Viterbi de w et la probabilité associée
         """
-        # on met les chemins et les probabilités dans un tableau de tuples
+        # On met les chemins et les probabilités dans un tableau de tuples
 
         chemins = []
         for k in range(self.nbs):
@@ -328,8 +340,8 @@ class HMM:
     def pw_viterbi(self, w):
         """
 
-        :param w: un mot généré par self
-        :return: la probabilité de w le long de son chemin de viterbi
+        :param w: Un mot généré par self
+        :return: La probabilité de w le long de son chemin de viterbi
         """
         v = self.viterbi(w)
         res = 1
@@ -355,9 +367,9 @@ class HMM:
     def nbviterbi(self, w, s):
         """
 
-        :param w: un mot généré par self
-        :param s: la liste des états cachés ayant généré w
-        :return: le nombre d'états identiques dans s et dans le chemin de viterbi de w
+        :param w: Un mot généré par self
+        :param s: La liste des états cachés ayant généré w
+        :return: Le nombre d'états identiques dans s et dans le chemin de viterbi de w
         """
         v = self.viterbi(w)
         nb = 0
@@ -384,8 +396,8 @@ class HMM:
     def log_vraissemblance(self, S):
         """
 
-        :param S: une liste de mots potentiellements générés par self
-        :return: le logarithme de la vraissemblance de self
+        :param S: Une liste de mots potentiellement générés par self
+        :return: Le logarithme de la vraisemblance de self
         """
         res = 0
         for w in S:
@@ -419,7 +431,7 @@ class HMM:
         i-ème observation de w et que l'état final soit k
         :param b: La matrice des b[k, i] qui sont les probabilités de générer w[i:] en partant de l'état k
         :return: Une matrice de probabilités telle que gamma[k,t] soit la probabilité que le t-ième état soit k en
-        connaissant le mot.
+        connaissant le mot
         """
         return (f * b) / np.einsum('ki,ki->i', f, b)
 
@@ -427,10 +439,10 @@ class HMM:
     def BW1(m0, s):
         """
 
-        :param m0:un HMM à mettre à jour pour augmenter la vraissemblance de s
+        :param m0: Un HMM à mettre à jour pour augmenter la vraisemblance de s
         :type m0: HMM
-        :param s: une liste de mots potentiellements générés par m0
-        :return: la mise à jour de m0
+        :param s: Une liste de mots potentiellement générés par m0
+        :return: La mise à jour de m0
         """
         pi = np.zeros(m0.nbs)
         T = np.zeros((m0.nbs, m0.nbs))
@@ -460,9 +472,9 @@ class HMM:
     def gen_HMM(nbs, nbl):
         """
 
-        :param nbs: le nombre d'états du HMM à créer
-        :param nbl: le nombre de lettres du HMM à créer
-        :return: un HMM généré aléatoirement
+        :param nbs: Le nombre d'états du HMM à créer
+        :param nbl: Le nombre de lettres du HMM à créer
+        :return: Un HMM généré aléatoirement
         """
         rd.seed()
         somme = 0
@@ -502,11 +514,11 @@ class HMM:
     def BW2(nbs, nbl, s, n):
         """
 
-        :param nbs: le nombre d'états du HMM à créer
-        :param nbl: le nomre de lettres du HMM à créer
-        :param s: une liste de mots pour laquelle on veut créer un HMM pour lequel la vraissemblance de S est grande
-        :param n: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
-        :return: un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
+        :param nbs: Le nombre d'états du HMM à créer
+        :param nbl: Le nombre de lettres du HMM à créer
+        :param s: Une liste de mots pour laquelle on veut créer un HMM pour lequel la vraisemblance de S est grande
+        :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :return: Un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
         """
         M = HMM.gen_HMM(nbs, nbl)
         for i in range(n):
@@ -517,13 +529,13 @@ class HMM:
     def BW3(nbs, nbl, w, n, m):
         """
 
-        :param nbs: le nombre d'états du HMM à créer
-        :param nbl: le nombre de lettres du HMM à créer
-        :param w: un mot pour lequel on veut créer un HMM pour lequel la vraissemblance de w est grande
-        :param n: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
-        :param m: le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
-        vraissemblance de w est la plus grande
-        :return: un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
+        :param nbs: Le nombre d'états du HMM à créer
+        :param nbl: Le nombre de lettres du HMM à créer
+        :param w: Un mot pour lequel on veut créer un HMM pour lequel la vraisemblance de w est grande
+        :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :param m: Le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
+        vraisemblance de w est la plus grande
+        :return: Un HMM pour lequel la vraisemblance de S est potentiellement très grande
         """
         hmm_possibles = []
         for i in range(m):
