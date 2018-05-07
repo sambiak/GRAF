@@ -173,7 +173,7 @@ class HMM:
         """
         lignes = HMM.__lignes_moins_commentaire(adr)
         # Comme les fichiers ont toujours la même configuration moins les commentaires,
-        # on a juste à organiser les données dans les matrices
+        # on a juste à organiser les données dans les matrices.
         nbl = int(next(lignes))
         nbs = int(next(lignes))
         initial = [float(next(lignes)) for _ in range(nbs)]
@@ -218,7 +218,7 @@ class HMM:
         :param l: Une liste de probabilités (sommant à 1)
         :return: Un indice i avec une probabilité de l[i]
         """
-        # x est une variable aléatoire comprise entre 0 et 1 suivant une distribution continue uniforme
+        # x est une variable aléatoire comprise entre 0 et 1 suivant une distribution continue uniforme.
         x = rd.random()
         somme_l = []
         somme = 0
@@ -304,12 +304,13 @@ class HMM:
         :param w: Une séquence
         :return: Le chemin de Viterbi de w et la probabilité associée
         """
-        # On met les chemins et les probabilités dans un tableau de tuples
+        # On met les chemins et les probabilités dans un tableau de tuples.
 
         chemins = []
         for k in range(self.nbs):
             chemin = [0]
             probabilité = 0
+            # On calcule P(s,0)*self.transitions[(s, k)] pour faciliter le calcul
             for s in range(self.nbs):
                 probabilité_t = self.emissions[(s, w[0])]*self.initial[s]*self.transitions[(s, k)]
                 if probabilité_t >= probabilité:
@@ -516,9 +517,9 @@ class HMM:
 
         :param nbs: Le nombre d'états du HMM à créer
         :param nbl: Le nombre de lettres du HMM à créer
-        :param s: Une liste de mots pour laquelle on veut créer un HMM pour lequel la vraisemblance de S est grande
+        :param s: Une liste de mots pour laquelle on veut créer un HMM pour lequel la vraisemblance de s est grande
         :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
-        :return: Un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
+        :return: Un HMM pour lequel la vraisemblance de s est potentiellemnt très grande
         """
         M = HMM.gen_HMM(nbs, nbl)
         for i in range(n):
@@ -535,7 +536,7 @@ class HMM:
         :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
         :param m: Le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
         vraisemblance de w est la plus grande
-        :return: Un HMM pour lequel la vraisemblance de S est potentiellement très grande
+        :return: Un HMM pour lequel la vraisemblance de s est potentiellement très grande
         """
         hmm_possibles = []
         for i in range(m):
@@ -545,15 +546,15 @@ class HMM:
     @staticmethod
     def BW4(nbs, nbl, s, n, m):
         """
-        identique à BW3, mais le cours nous demande de mettre en paramètre un seul mot, alors que le projet final va
+        Identique à BW3, mais le cours nous demande de mettre en paramètre un seul mot, alors que le projet final va
         l'utiliser sur une liste de mots
-        :param nbs: le nombre d'états du HMM à créer
-        :param nbl: le nombre de lettres du HMM à créer
-        :param w: une liste de mots pour lequel on veut créer un HMM pour lequel la vraissemblance de s est grande
-        :param n: le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
-        :param m: le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
-        vraissemblance de w est la plus grande
-        :return: un HMM pour lequel la vraisemblance de S est potentiellemnt très grande
+        :param nbs: Le nombre d'états du HMM à créer
+        :param nbl: Le nombre de lettres du HMM à créer
+        :param w: Une liste de mots pour lequel on veut créer un HMM pour lequel la vraisemblance de s est grande
+        :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :param m: Le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
+        vraisemblance de w est la plus grande
+        :return: Un HMM pour lequel la vraisemblance de s est potentiellemnt très grande
         """
         hmm_possibles = []
         for i in range(m):
