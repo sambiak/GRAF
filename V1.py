@@ -252,13 +252,13 @@ class HMM:
         :return: la probabilité que self génère cette séquence
         """
         n = len(w)
-        F = []
+        f = []
         for k in range(self.nbs):
-            F += [self.initial[k]*self.emissions[k, w[0]]]
-        F = np.array(F)
+            f += [self.initial[k]*self.emissions[k, w[0]]]
+        f = np.array(f)
         for i in range(1, n):
-            F = (F  @ self.transitions)*self.emissions[:, w[i]]
-        return F.sum()
+            f = (f  @ self.transitions)*self.emissions[:, w[i]]
+        return f.sum()
 
     def genere_b(self, w):
         """
@@ -323,6 +323,11 @@ class HMM:
 
 # Exo 15
     def pw_viterbi(self, w):
+        """
+
+        :param w: un mot généré par self
+        :return:
+        """
         v = self.viterbi(w)
         res = 1
         for i in range(len(w)):
@@ -390,7 +395,7 @@ class HMM:
             b = m0.genere_b(w)
             xi = HMM.xi(m0, w, f, b)
             gamma = HMM.gamma(f, b)
-            pi += gamma[:,0]
+            pi += gamma[:, 0]
             T += np.einsum('klt->kl', xi)
             for o in range(m0.nbl):
                 for t in range(len(w)):
@@ -409,34 +414,34 @@ class HMM:
     @staticmethod
     def gen_HMM(nbs, nbl):
         rd.seed()
-        sum = 0
+        somme = 0
         initial = []
         for i in range(nbs):
             x = rd.random()
             initial += [x]
-            sum += x
+            somme += x
         for i in range(nbs):
-            initial[i] /= sum
+            initial[i] /= somme
         transitions = []
         for j in range(nbs):
             transitions += [[]]
-            sum = 0
+            somme = 0
             for i in range(nbs):
                 x = rd.random()
                 transitions[j] += [x]
-                sum += x
+                somme += x
             for i in range(nbs):
-                transitions[j][i] /= sum
+                transitions[j][i] /= somme
         emissions = []
         for j in range(nbs):
             emissions += [[]]
-            sum = 0
+            somme = 0
             for i in range(nbl):
                 x = rd.random()
                 emissions[j] += [x]
-                sum += x
+                somme += x
             for i in range(nbl):
-                emissions[j][i] /= sum
+                emissions[j][i] /= somme
         initial = np.array(initial)
         transitions = np.array(transitions)
         emissions = np.array(emissions)
@@ -451,8 +456,8 @@ class HMM:
 
     @staticmethod
     def BW3(nbs, nbl, w, n, m):
-        mlijhdfsk = [] #serieux ça fait quoi ce machin
+        hmm_possibles = [] #serieux ça fait quoi ce machin
         for i in range(m):
-            mlijhdfsk += [HMM.BW2(nbs, nbl, [w], n)]
-        return max(mlijhdfsk, key=lambda x: x.pfw(w))
+            hmm_possibles += [HMM.BW2(nbs, nbl, [w], n)]
+        return max(hmm_possibles, key=lambda x: x.pfw(w))
 
