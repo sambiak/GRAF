@@ -15,6 +15,7 @@ def sequence(adr):
         w = []
         for char in word:
             w += [ord(char) - 97]
+        w = w[:-1]
         S += [w]
     return S
 
@@ -40,5 +41,14 @@ def xval(nbFolds, S, nbL, nbSMin, nbSMax, nbIter, nbInit):
 
 print("Bienvenue dans ce programme de présentation de la classe HMM", "\n")
 print("Réalisée par le groupe GRAF", "\n\n")
-print("Nous allons voir une application des HMM pour reconnnaître une langue et en générer des mots")
-
+print("Nous allons voir une application des HMM pour reconnnaître une langue et en générer des mots", "\n\n")
+print("Commençons par récupérer une séquence de mots, les plus courants de la langue anglaise, que vous pouvez voir dans le fichier 'anglais2000'", "\n\n")
+S_anglais = sequence('anglais2000')
+print("Génèrons un HMM au hasard et adaptons-le à la génération des mots de cette séquence")
+print("Nous avons choisis de générer un HMM avec 20 états, et de le mettre à jour 10 fois", "\n\n")
+HMM_anglais1 = HMM.HMM.BW2(100, 26, S_anglais, 1000)
+print("Nous obtenons un HMM que nous stockons dans le fichier 'HMM_anglais_V1'", "\n\n")
+HMM_anglais1.save('HMM_anglais_V1')
+print("Interressons-nous à la log-vraissemblance de notre séquence de mots anglais dans ce HMM:")
+logV_anglais1 = HMM_anglais1.log_vraissemblance(S_anglais)
+print(logV_anglais1)
