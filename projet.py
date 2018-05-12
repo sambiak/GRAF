@@ -36,3 +36,9 @@ def xval(nbFolds, S, nbL, nbSMin, nbSMax, nbIter, nbInit):
             lvOpt = lv
             nbSOpt = nbS
     return lvOpt,nbSOpt
+
+
+print("Bienvenue dans ce programme de présentation de la classe HMM", "\n")
+print("Réalisée par le groupe GRAF", "\n\n")
+print("Nous allons voir une application des HMM pour reconnnaître une langue et en générer des mots")
+
