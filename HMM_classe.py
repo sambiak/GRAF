@@ -141,7 +141,11 @@ class HMM:
         if not isinstance(emissions, np.ndarray):
             raise TypeError("emissions doit être un array numpy")
         if np.shape(emissions) != (self.nbs, self.nbl):
-            raise ValueError("emissions n'a pas la bonne dimension")
+            err_text = "emissions n'a pas la bonne dimension.\n La dimension attendue est : "
+            err_text = err_text + str((self.nbs, self.nbl))
+            err_text += "\n on a "
+            err_text += str(np.shape(emissions))
+            raise ValueError(err_text )
         for line in range(self.nbs):
             if not np.isclose(np.array([emissions[line].sum()]), np.array([1.0])):
                 raise ValueError("la somme des probabilités de transition, ligne par ligne, doit être 1")
@@ -178,7 +182,7 @@ class HMM:
         nbs = int(next(lignes))
         initial = [float(next(lignes)) for _ in range(nbs)]
         transitions = [[j for j in map(float, next(lignes).split())] for _ in range(nbs)]
-        emmissions = [[j for j in map(float, next(lignes).split())] for _ in range(nbl)]
+        emmissions = [[j for j in map(float, next(lignes).split())] for _ in range(nbs)]
         return HMM(nbl, nbs, np.array(initial).T, np.array(transitions), np.array(emmissions))
 
 # Exo 11 question 4
@@ -527,6 +531,28 @@ class HMM:
         return M
 
     @staticmethod
+    def BW2_mieux(nbs, nbl, s):
+        """
+
+        :param nbs: Le nombre d'états du HMM à créer
+        :param nbl: Le nombre de lettres du HMM à créer
+        :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :return: Un HMM pour lequel la vraisemblance de s est potentiellemnt très grande
+        """
+        M = HMM.gen_HMM(nbs, nbl)
+        cond = True
+        nombre_confiance = 10
+        log_vs = np.zeros((nombre_confiance, ))
+        i = 0
+        logv = 10
+        while not np.allclose(log_vs, logv, atol = 1):
+            M = HMM.BW1(M, s)
+            logv = M.log_vraissemblance(s)
+            log_vs[i % nombre_confiance] = logv
+            i = i + 1
+        return M, i
+
+    @staticmethod
     def BW3(nbs, nbl, w, n, m):
         """
 
@@ -559,4 +585,21 @@ class HMM:
         hmm_possibles = []
         for i in range(m):
             hmm_possibles += [HMM.BW2(nbs, nbl, s, n)]
+        return max(hmm_possibles, key=lambda x: x.log_vraissemblance(s))
+
+    @staticmethod
+    def BW4_mieux(nbs, nbl, s, m):
+        """
+        Identique à BW3, mais le cours nous demande de mettre en paramètre un seul mot, alors que le projet final va
+        l'utiliser sur une liste de mots
+        :param nbs: Le nombre d'états du HMM à créer
+        :param nbl: Le nombre de lettres du HMM à créer
+        :param w: Une liste de mots pour lequel on veut créer un HMM pour lequel la vraisemblance de s est grande
+        :param m: Le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
+        vraisemblance de w est la plus grande
+        :return: Un HMM pour lequel la vraisemblance de s est potentiellemnt très grande
+        """
+        hmm_possibles = []
+        for i in range(m):
+            hmm_possibles += [HMM.BW2_mieux(nbs, nbl, s)[0]]
         return max(hmm_possibles, key=lambda x: x.log_vraissemblance(s))
