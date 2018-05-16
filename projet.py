@@ -10,7 +10,9 @@ import HMM_classe as HMM
 
 def sequence_langue(adr):
     file = open(adr)
-    return sequence(file)
+    res = sequence(file)
+    file.close()
+    return res
 
 def sequence(S):
     Res = []
@@ -44,14 +46,14 @@ def xval(nbFolds, S, nbL, nbSMin, nbSMax, nbInit):
             learn = [S[l[j]] for j in range(f1)]
             learn += [S[l[j]] for j in range(f2,n)]
             test = [S[l[j]] for j in range(f1,f2)]
-            h = HMM.HMM.BW4_mieux(nbL,nbS,learn,nbInit)
+            h = HMM.HMM.BW4_mieux(nbS,nbL,learn,nbInit)
         lv += h.log_vraissemblance(test)
         if lv > lvOpt:
             lvOpt = lv
             nbSOpt = nbS
     return lvOpt,nbSOpt
 
-
+"""
 print("Bienvenue dans ce programme de présentation de la classe HMM", "\n")
 print("Réalisée par le groupe GRAF", "\n\n")
 print("Nous allons voir une application des HMM pour reconnnaître une langue et en générer des mots", "\n\n")
@@ -73,3 +75,39 @@ for i in range(10):
     w = HMM_anglais1.gen_rand(5)[1]
     S += [w]
 print(mots(S))
+"""
+
+S_anglais = sequence_langue('anglais2000')
+S_allemand = sequence_langue('allemand2000')
+S_espagnol = sequence_langue('espagnol2000')
+S_neerland = sequence_langue('neerland2000')
+
+
+"""
+nbs_anglais = xval(5, S_anglais, 26, 20, 100, 10)
+print(nbs_anglais)
+nbs_allemand = xval(5, S_allemand, 26, 20, 100, 10)
+print(nbs_allemand)
+nbs_espagnol = xval(5, S_espagnol, 26, 20, 100, 10)
+print(nbs_espagnol)
+nbs_neerland = xval(5, S_neerland, 26, 20, 100, 10)
+print(nbs_neerland)
+"""
+
+
+HMM_anglais = HMM.HMM.BW4_mieux(30, 26, S_anglais, 10)
+print('anglais')
+HMM_anglais.save('HMM_anglais')
+
+HMM_allemand = HMM.HMM.BW4_mieux(30, 26, S_allemand, 10)
+print('allemand')
+HMM_allemand.save('HMM_allemand')
+
+HMM_espagnol = HMM.HMM.BW4_mieux(30, 26, S_espagnol, 10)
+print('espagnol')
+HMM_espagnol.save('HMM_espagnol')
+
+HMM_neerland = HMM.HMM.BW4_mieux(30, 26, S_neerland, 10)
+print('neerland')
+HMM_neerland.save('HMM_neerland')
+
