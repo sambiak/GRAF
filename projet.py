@@ -14,6 +14,7 @@ def sequence_langue(adr):
     file.close()
     return res
 
+
 def sequence(S):
     Res = []
     for word in S:
@@ -23,6 +24,7 @@ def sequence(S):
         w = w[:-1]
         Res += [w]
     return Res
+
 
 def mots(S):
     Res = []
@@ -34,24 +36,27 @@ def mots(S):
         Res += [word]
     return Res
 
+
 def xval(nbFolds, S, nbL, nbSMin, nbSMax, nbInit):
     n = len(S)
     l = np.random.permutation(n)
     lvOpt = -float('inf')
+    nbSOpt = nbSMin
     for nbS in range(nbSMin, nbSMax):
         lv = 0
-        for i in range(1,nbFolds+1):
+        for i in range(1, nbFolds+1):
             f1 = int((i-1)*n/nbFolds)
             f2 = int(i*n/nbFolds)
             learn = [S[l[j]] for j in range(f1)]
-            learn += [S[l[j]] for j in range(f2,n)]
-            test = [S[l[j]] for j in range(f1,f2)]
-            h = HMM.HMM.BW4_mieux(nbS,nbL,learn,nbInit)
-            lv += h.log_vraissemblance(test)
+            learn += [S[l[j]] for j in range(f2, n)]
+            test = [S[l[j]] for j in range(f1, f2)]
+            h = HMM.HMM.BW4_mieux(nbS, nbL, learn, nbInit)
+            lv += h.log_vraisemblance(test)
         if lv > lvOpt:
             lvOpt = lv
             nbSOpt = nbS
     return nbSOpt
+
 
 def langue_prob(mot):
     w = sequence([mot])[0]
@@ -59,7 +64,7 @@ def langue_prob(mot):
     Langue = ['Néerlandais', 'Allemand', 'Espagnol', 'Anglais']
     logps = []
     for M in HMMs:
-        logp = M.log_vraissemblance([w])
+        logp = M.log_vraisemblance([w])
         logps += [logp]
     print(Langue[logps.index(max(logps))])
 
@@ -70,6 +75,7 @@ def mots_langue(M):
         w = M.gen_rand(3 + i % 5)[1]
         S += [w]
     print(mots(S))
+
 
 print("Bienvenue dans ce programme de présentation de la classe HMM", "\n")
 print("Réalisée par le groupe GRAF", "\n\n")
@@ -101,6 +107,7 @@ nbsOpt = xval(5, S_anglais, 26, 20, 50, 10)
 print(nbsOpt)
 """
 
+
 print(Script)
 print("\n\nNous avons obtenu un nombre d'états optimal de 45, pour l'anglais. Étant donné le temps d'exécution de ce"
       "programme, nous avons supposé que c'était le même nombre d'états pour toutes les langues")
@@ -117,18 +124,25 @@ S_allemand = sequence_langue('allemand2000')
 S_espagnol = sequence_langue('espagnol2000')
 S_neerland = sequence_langue('neerland2000')
 
+
 HMM_anglais = HMM.HMM.BW4_mieux(45, 26, S_anglais, 10)
+print('anglais')
 HMM_anglais.save('HMM_anglais')
 
 HMM_allemand = HMM.HMM.BW4_mieux(45, 26, S_allemand, 10)
+print('allemand')
 HMM_allemand.save('HMM_allemand')
 
 HMM_espagnol = HMM.HMM.BW4_mieux(45, 26, S_espagnol, 10)
+print('espagnol')
 HMM_espagnol.save('HMM_espagnol')
 
+
 HMM_neerland = HMM.HMM.BW4_mieux(45, 26, S_neerland, 10)
+print('neerland')
 HMM_neerland.save('HMM_neerland')
 """
+
 
 print(Script)
 print("Maintenant, chargeons ces HMMs pour voir ce que nous pouvons en faire")
@@ -158,18 +172,18 @@ mots_langue(HMM_neerland)
 print("\n\nNous pouvons aussi déterminer la langue probable d'un mot (si nous avons un HMM pour la langue à laquelle il"
       "appartient). Voici quelques exemples:")
 
-print("\n'five' est un mot anglais, on obtient: ", end = '')
+print("\n'five' est un mot anglais, on obtient: ", end='')
 langue_prob('five')
 
-print("\n'hablar' est un mot espagnol, on obtient: ", end = '')
+print("\n'hablar' est un mot espagnol, on obtient: ", end='')
 langue_prob('hablar')
 
-print("\n'das' est un mot allemand, on obtient: ", end = '')
+print("\n'das' est un mot allemand, on obtient: ", end='')
 langue_prob('das')
 
-print("\n'miljoen' est un mot néerlandais, on obtient: ", end = '')
+print("\n'miljoen' est un mot néerlandais, on obtient: ", end='')
 langue_prob('miljoen')
 
-print("\nCe modèle a des limites: 'los' est un mot espagnol, mais on obtient", end = '')
+print("\nCe modèle a des limites: 'los' est un mot espagnol, mais on obtient", end='')
 langue_prob('los')
 print("Car c'est aussi un mot néerlandais")
