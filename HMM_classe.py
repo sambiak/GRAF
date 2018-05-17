@@ -2,7 +2,6 @@ import numpy as np
 import random as rd
 
 
-# Exo 11 question 1
 class HMM:
     """ Define an HMM"""
 
@@ -58,9 +57,9 @@ class HMM:
         :return: None
         """
         if not isinstance(nbs, int):
-            raise TypeError("nbl doit être entier")
+            raise TypeError("nbs doit être entier")
         if nbs <= 0:
-            raise ValueError("nbl doit être strictement positif")
+            raise ValueError("nbs doit être strictement positif")
         self.__nbs = nbs
 
     @property
@@ -83,7 +82,7 @@ class HMM:
         if np.shape(initial) != (self.nbs, ):
             msg_err = "initial n'a pas la bonne dimension.\n"
             msg_err += "Sa dimension est " + str(np.shape(initial)) + ".\n"
-            msg_err += "Dimension attendu :" + str((self.nbs,))
+            msg_err += "Dimension attendue :" + str((self.nbs,))
             raise ValueError(msg_err)
         if not np.isclose(np.array([initial.sum()]), np.array([1.0])):
             raise ValueError("la somme des probabilités initiales doit être 1")
@@ -112,7 +111,7 @@ class HMM:
         if np.shape(transitions) != (self.nbs, self.nbs):
             msg_err = "transitions n'a pas la bonne dimension.\n"
             msg_err += "Sa dimension est " + str(np.shape(transitions)) + ".\n"
-            msg_err += "Dimension attendu :" + str((self.nbs, self.nbs))
+            msg_err += "Dimension attendue :" + str((self.nbs, self.nbs))
             raise ValueError(msg_err)
         for line in range(self.nbs):
             if not np.isclose(np.array([transitions[line].sum()]), np.array([1.0])):
@@ -142,10 +141,10 @@ class HMM:
             raise TypeError("emissions doit être un array numpy")
         if np.shape(emissions) != (self.nbs, self.nbl):
             err_text = "emissions n'a pas la bonne dimension.\n La dimension attendue est : "
-            err_text = err_text + str((self.nbs, self.nbl))
+            err_text += str((self.nbs, self.nbl))
             err_text += "\n on a "
             err_text += str(np.shape(emissions))
-            raise ValueError(err_text )
+            raise ValueError(err_text)
         for line in range(self.nbs):
             if not np.isclose(np.array([emissions[line].sum()]), np.array([1.0])):
                 raise ValueError("la somme des probabilités de transition, ligne par ligne, doit être 1")
@@ -156,7 +155,7 @@ class HMM:
         self.__emissions = emissions
 
     @staticmethod
-    def __lignes_moins_commentaire(adr):
+    def __lignes_moins_commentaires(adr):
         """
 
         :param adr: Adresse du fichier contenant la sauvegarde
@@ -167,7 +166,6 @@ class HMM:
                 if line[0] != "#":
                     yield line
 
-# Exo 11 question 2
     @staticmethod
     def load(adr):
         """
@@ -175,7 +173,7 @@ class HMM:
         :param adr: L'adresse d'un fichier représentant un HMM
         :return: Le HMM représenté dans le fichier
         """
-        lignes = HMM.__lignes_moins_commentaire(adr)
+        lignes = HMM.__lignes_moins_commentaires(adr)
         # Comme les fichiers ont toujours la même configuration moins les commentaires,
         # on a juste à organiser les données dans les matrices.
         nbl = int(next(lignes))
@@ -185,7 +183,6 @@ class HMM:
         emmissions = [[j for j in map(float, next(lignes).split())] for _ in range(nbs)]
         return HMM(nbl, nbs, np.array(initial).T, np.array(transitions), np.array(emmissions))
 
-# Exo 11 question 4
     def save(self, adr='HMM.txt'):
         """
         Sauvegarde un HMM.
@@ -212,8 +209,6 @@ class HMM:
             for e in line:
                 fichier.write(str(e) + ' ')
         fichier.close()
-
-# Exo 11 question 3
 
     @staticmethod
     def draw_multinomial(l):
@@ -248,7 +243,7 @@ class HMM:
             O += [HMM.draw_multinomial(self.emissions[s])]
             s = HMM.draw_multinomial(self.transitions[s])
             S += [s]
-        return S, O
+        return S[:-1], O
 
     def genere_f(self, w):
         """
@@ -288,7 +283,7 @@ class HMM:
 
         b = np.ones((self.nbs, len(w)))
         for i in reversed(range(len(w) - 1)):
-            b[:,i] = self.transitions @ (self.emissions[:, w[i + 1]] * b[:, i + 1])
+            b[:, i] = self.transitions @ (self.emissions[:, w[i + 1]] * b[:, i + 1])
 
         return b
 
@@ -299,8 +294,7 @@ class HMM:
         :return: La probabilité que self génère cette séquence
         """
         b = self.genere_b(w)
-        return np.einsum("k,k,k->", self.initial, self.emissions[:, w[0]], b[:,0])
-#Exo 14
+        return np.einsum("k,k,k->", self.initial, self.emissions[:, w[0]], b[:, 0])
 
     def viterbi(self, w):
         """
@@ -326,7 +320,7 @@ class HMM:
             chemins_t = []
             for k in range(self.nbs):
                 probabilité = 0
-
+                chemin = [None, None]
                 for s in range(self.nbs):
                     probabilité_t = chemins[s][1]*self.emissions[(s, w[i])]
                     if i < (len(w) - 1):
@@ -341,7 +335,6 @@ class HMM:
             chemins[i] = chem
         return max(chemins, key=lambda x: x[1])
 
-# Exo 15
     def pw_viterbi(self, w):
         """
 
@@ -368,7 +361,6 @@ class HMM:
         pwv *= self.emissions[v[-1], w[-1]]
         return pwv/p
 
-# Exo 16
     def nbviterbi(self, w, s):
         """
 
@@ -383,29 +375,28 @@ class HMM:
                 nb += 1
         return nb
 
-# Exo 13
     def predit(self, w):
         """
 
         :param w: Un mot généré par self
         :return: La lettre qui a la plus forte probabilité d'être générée
         """
-        H = self.initial
+        h = self.initial
         for i in range(len(w)):
-            H = (self.transitions.T*self.emissions[:, w[i]].T) @ H
-        P = []
+            h = (self.transitions.T*self.emissions[:, w[i]].T) @ h
+        p = []
         for l in range(self.nbl):
-            P += [self.emissions[:, l] @ H]
-        return P.index(max(P))
+            p += [self.emissions[:, l] @ h]
+        return p.index(max(p))
 
-    def log_vraissemblance(self, S):
+    def log_vraisemblance(self, s):
         """
 
-        :param S: Une liste de mots potentiellement générés par self
+        :param s: Une liste de mots potentiellement générés par self
         :return: Le logarithme de la vraisemblance de self
         """
         res = 0
-        for w in S:
+        for w in s:
             res += np.emath.log(self.pfw(w))
         return res
 
@@ -450,28 +441,28 @@ class HMM:
         :return: La mise à jour de m0
         """
         pi = np.zeros(m0.nbs)
-        T = np.zeros((m0.nbs, m0.nbs))
-        O = np.zeros((m0.nbs, m0.nbl))
+        tr = np.zeros((m0.nbs, m0.nbs))
+        ob = np.zeros((m0.nbs, m0.nbl))
         for w in s:
             f = m0.genere_f(w)
             b = m0.genere_b(w)
             xi = HMM.xi(m0, w, f, b)
             gamma = HMM.gamma(f, b)
             pi += gamma[:, 0]
-            T += np.einsum('klt->kl', xi)
+            tr += np.einsum('klt->kl', xi)
             for o in range(m0.nbl):
                 for t in range(len(w)):
                     if w[t] == o:
-                        O[:, o] += gamma[:, t]
+                        ob[:, o] += gamma[:, t]
 
         # Normalisation
         pi /= pi.sum()
-        for line in T:
+        for line in tr:
             line /= line.sum()
-        for line in O:
+        for line in ob:
             line /= line.sum()
 
-        return HMM(m0.nbl, m0.nbs, pi, T, O)
+        return HMM(m0.nbl, m0.nbs, pi, tr, ob)
 
     @staticmethod
     def gen_HMM(nbs, nbl):
@@ -525,10 +516,10 @@ class HMM:
         :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
         :return: Un HMM pour lequel la vraisemblance de s est potentiellemnt très grande
         """
-        M = HMM.gen_HMM(nbs, nbl)
+        m = HMM.gen_HMM(nbs, nbl)
         for i in range(n):
-            M = HMM.BW1(M, s)
-        return M
+            m = HMM.BW1(m, s)
+        return m
 
     @staticmethod
     def BW2_mieux(nbs, nbl, s):
@@ -536,21 +527,20 @@ class HMM:
 
         :param nbs: Le nombre d'états du HMM à créer
         :param nbl: Le nombre de lettres du HMM à créer
-        :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
+        :param s: Une liste de mots pour laquelle on veut créer un HMM pour lequel la vraisemblance de s est grande
         :return: Un HMM pour lequel la vraisemblance de s est potentiellemnt très grande
         """
-        M = HMM.gen_HMM(nbs, nbl)
-        cond = True
+        m = HMM.gen_HMM(nbs, nbl)
         nombre_confiance = 10
         log_vs = np.zeros((nombre_confiance, ))
         i = 0
         logv = 10
-        while not np.allclose(log_vs, logv, atol = 1):
-            M = HMM.BW1(M, s)
-            logv = M.log_vraissemblance(s)
+        while not np.allclose(log_vs, logv, atol=1):
+            m = HMM.BW1(m, s)
+            logv = m.log_vraisemblance(s)
             log_vs[i % nombre_confiance] = logv
-            i = i + 1
-        return M, i
+            i += 1
+        return m, i
 
     @staticmethod
     def BW3(nbs, nbl, w, n, m):
@@ -576,7 +566,7 @@ class HMM:
         l'utiliser sur une liste de mots
         :param nbs: Le nombre d'états du HMM à créer
         :param nbl: Le nombre de lettres du HMM à créer
-        :param w: Une liste de mots pour lequel on veut créer un HMM pour lequel la vraisemblance de s est grande
+        :param s: Une liste de mots pour lequel on veut créer un HMM pour lequel la vraisemblance de s est grande
         :param n: Le nombre de fois qu'on va mettre à jour un HMM tiré aléatoirement (avec BW1)
         :param m: Le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
         vraisemblance de w est la plus grande
@@ -585,7 +575,7 @@ class HMM:
         hmm_possibles = []
         for i in range(m):
             hmm_possibles += [HMM.BW2(nbs, nbl, s, n)]
-        return max(hmm_possibles, key=lambda x: x.log_vraissemblance(s))
+        return max(hmm_possibles, key=lambda x: x.log_vraisemblance(s))
 
     @staticmethod
     def BW4_mieux(nbs, nbl, s, m):
@@ -594,7 +584,7 @@ class HMM:
         l'utiliser sur une liste de mots
         :param nbs: Le nombre d'états du HMM à créer
         :param nbl: Le nombre de lettres du HMM à créer
-        :param w: Une liste de mots pour lequel on veut créer un HMM pour lequel la vraisemblance de s est grande
+        :param s: Une liste de mots pour lequel on veut créer un HMM pour lequel la vraisemblance de s est grande
         :param m: Le nombre de fois qu'on va tirer aléatoirement un HMM, pour ensuite choisir celui pour lequel la
         vraisemblance de w est la plus grande
         :return: Un HMM pour lequel la vraisemblance de s est potentiellemnt très grande
@@ -602,4 +592,4 @@ class HMM:
         hmm_possibles = []
         for i in range(m):
             hmm_possibles += [HMM.BW2_mieux(nbs, nbl, s)[0]]
-        return max(hmm_possibles, key=lambda x: x.log_vraissemblance(s))
+        return max(hmm_possibles, key=lambda x: x.log_vraisemblance(s))
