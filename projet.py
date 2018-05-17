@@ -53,7 +53,24 @@ def xval(nbFolds, S, nbL, nbSMin, nbSMax, nbInit):
             nbSOpt = nbS
     return lvOpt,nbSOpt
 
-"""
+def langue_prob(mot):
+    w = sequence([mot])[0]
+    HMMs = [HMM_neerland, HMM_allemand, HMM_espagnol, HMM_anglais]
+    Langue = ['Néerlandais', 'Allemand', 'Espagnol', 'Anglais']
+    logps = []
+    for M in HMMs:
+        logp = M.log_vraissemblance([w])
+        logps += [logp]
+    print(Langue[logps.index(max(logps))])
+
+
+def mots_langue(M):
+    S = []
+    for i in range(10):
+        w = M.gen_rand(3 + i % 5)[1]
+        S += [w]
+    print(mots(S))
+
 print("Bienvenue dans ce programme de présentation de la classe HMM", "\n")
 print("Réalisée par le groupe GRAF", "\n\n")
 print("Nous allons voir une application des HMM pour reconnnaître une langue et en générer des mots", "\n\n")
@@ -75,44 +92,33 @@ for i in range(10):
     w = HMM_anglais1.gen_rand(5)[1]
     S += [w]
 print(mots(S))
-"""
 
-"""
+print("\n\nNous avons jugé préférable de générer un HMM avec 30 états pour chaque langue, en tirant au hasard plusieurs"
+      " HMMs à chaque fois, pour augmenter nos chances d'optenir un bon HMM\nNous avons  donc éxécuté le script suivant"
+      ", permettant de générer un HMM pour chaque langue et de le sauvegarder:\n\n")
+
+
+Script = """
 S_anglais = sequence_langue('anglais2000')
 S_allemand = sequence_langue('allemand2000')
 S_espagnol = sequence_langue('espagnol2000')
 S_neerland = sequence_langue('neerland2000')
-"""
 
-"""
-nbs_anglais = xval(5, S_anglais, 26, 20, 100, 10)
-print(nbs_anglais)
-nbs_allemand = xval(5, S_allemand, 26, 20, 100, 10)
-print(nbs_allemand)
-nbs_espagnol = xval(5, S_espagnol, 26, 20, 100, 10)
-print(nbs_espagnol)
-nbs_neerland = xval(5, S_neerland, 26, 20, 100, 10)
-print(nbs_neerland)
-"""
-
-"""
 HMM_anglais = HMM.HMM.BW4_mieux(30, 26, S_anglais, 10)
-print('anglais')
 HMM_anglais.save('HMM_anglais')
 
 HMM_allemand = HMM.HMM.BW4_mieux(30, 26, S_allemand, 10)
-print('allemand')
 HMM_allemand.save('HMM_allemand')
 
 HMM_espagnol = HMM.HMM.BW4_mieux(30, 26, S_espagnol, 10)
-print('espagnol')
 HMM_espagnol.save('HMM_espagnol')
 
 HMM_neerland = HMM.HMM.BW4_mieux(30, 26, S_neerland, 10)
-print('neerland')
 HMM_neerland.save('HMM_neerland')
 """
 
+print(Script)
+print("Maintenant, chargeons ces HMMs pour voir ce que nous pouvons en faire")
 
 HMM_anglais = HMM.HMM.load('HMM_anglais')
 HMM_allemand = HMM.HMM.load('HMM_allemand')
@@ -120,38 +126,37 @@ HMM_espagnol = HMM.HMM.load('HMM_espagnol')
 HMM_neerland = HMM.HMM.load('HMM_neerland')
 
 
-S = []
-for i in range(10):
-    w = HMM_anglais.gen_rand(3 + i % 5)[1]
-    S += [w]
-print(mots(S))
+print("Une première utilité, que nous avons vue plus haut, est de générer pour chaque langue des mots pouvant y"
+      " ressembler, de longueurs différentes par soucis de réalisme\n\nNous obtenons:")
 
-S = []
-for j in range(10):
-    w = HMM_allemand.gen_rand(3 + j %5)[1]
-    S += [w]
-print(mots(S))
+print("\nPour l'anglais:\n")
+mots_langue(HMM_anglais)
 
-S = []
-for k in range(10):
-    w = HMM_espagnol.gen_rand(3 + k % 5)[1]
-    S += [w]
-print(mots(S))
+print("\nPour l'allemand:\n")
+mots_langue(HMM_allemand)
 
-S = []
-for l in range(10):
-    w = HMM_neerland.gen_rand(3 + l % 5)[1]
-    S += [w]
-print(mots(S))
+print("\nPour l'espagnol:\n")
+mots_langue(HMM_espagnol)
+
+print("\nPour le néerlandais:\n")
+mots_langue(HMM_neerland)
 
 
+print("\n\nNous pouvons aussi déterminer la langue probable d'un mot (si nous avons un HMM pour la langue à laquelle il"
+      "appartient). Voici quelques exemples:")
 
-mot = 'five'
-w = sequence([mot])[0]
-HMMs = [HMM_neerland, HMM_allemand, HMM_espagnol, HMM_anglais]
-logps = []
-for M in HMMs:
-    logp = M.log_vraissemblance([w])
-    logps += [logp]
-print(logps)
+print("\n'five' est un mot anglais, on obtient: ", end = '')
+langue_prob('five')
 
+print("\n'hablar' est un mot espagnol, on obtient: ", end = '')
+langue_prob('hablar')
+
+print("\n'das' est un mot allemand, on obtient: ", end = '')
+langue_prob('das')
+
+print("\n'miljoen' est un mot néerlandais, on obtient: ", end = '')
+langue_prob('miljoen')
+
+print("\nCe modèle a des limites: 'los' est un mot espagnol, mais on obtient", end = '')
+langue_prob('los')
+print("Car c'est aussi un mot néerlandais")
