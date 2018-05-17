@@ -51,7 +51,7 @@ def xval(nbFolds, S, nbL, nbSMin, nbSMax, nbInit):
         if lv > lvOpt:
             lvOpt = lv
             nbSOpt = nbS
-    return lvOpt,nbSOpt
+    return nbSOpt
 
 def langue_prob(mot):
     w = sequence([mot])[0]
@@ -93,9 +93,22 @@ for i in range(10):
     S += [w]
 print(mots(S))
 
-print("\n\nNous avons jugé préférable de générer un HMM avec 30 états pour chaque langue, en tirant au hasard plusieurs"
-      " HMMs à chaque fois, pour augmenter nos chances d'optenir un bon HMM\nNous avons  donc éxécuté le script suivant"
-      ", permettant de générer un HMM pour chaque langue et de le sauvegarder:\n\n")
+print("\n\nPour déterminer le nombre d'états optimal pour notre HMM, nous avons exécuté le script suivant:")
+
+Script = """
+S_anglais = sequence_langue('anglais2000')
+nbsOpt = xval(5, S_anglais, 26, 20, 50, 10)
+print(nbsOpt)
+"""
+
+print(Script)
+print("\n\nNous avons obtenu un nombre d'états optimal de 45, pour l'anglais. Étant donné le temps d'exécution de ce"
+      "programme, nous avons supposé que c'était le même nombre d'états pour toutes les langues")
+
+
+print("\n\nNous avons généré un HMM avec 45 états pour chaque langue, en tirant au hasard plusieurs HMMs à chaque fois,"
+      " pour augmenter nos chances d'optenir un bon HMM\nNous avons  donc exécuté le script suivant, permettant de "
+      "générer un HMM pour chaque langue et de le sauvegarder:\n\n")
 
 
 Script = """
@@ -104,16 +117,16 @@ S_allemand = sequence_langue('allemand2000')
 S_espagnol = sequence_langue('espagnol2000')
 S_neerland = sequence_langue('neerland2000')
 
-HMM_anglais = HMM.HMM.BW4_mieux(30, 26, S_anglais, 10)
+HMM_anglais = HMM.HMM.BW4_mieux(45, 26, S_anglais, 10)
 HMM_anglais.save('HMM_anglais')
 
-HMM_allemand = HMM.HMM.BW4_mieux(30, 26, S_allemand, 10)
+HMM_allemand = HMM.HMM.BW4_mieux(45, 26, S_allemand, 10)
 HMM_allemand.save('HMM_allemand')
 
-HMM_espagnol = HMM.HMM.BW4_mieux(30, 26, S_espagnol, 10)
+HMM_espagnol = HMM.HMM.BW4_mieux(45, 26, S_espagnol, 10)
 HMM_espagnol.save('HMM_espagnol')
 
-HMM_neerland = HMM.HMM.BW4_mieux(30, 26, S_neerland, 10)
+HMM_neerland = HMM.HMM.BW4_mieux(45, 26, S_neerland, 10)
 HMM_neerland.save('HMM_neerland')
 """
 
