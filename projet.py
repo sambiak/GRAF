@@ -47,7 +47,7 @@ def xval(nbFolds, S, nbL, nbSMin, nbSMax, nbInit):
             learn += [S[l[j]] for j in range(f2,n)]
             test = [S[l[j]] for j in range(f1,f2)]
             h = HMM.HMM.BW4_mieux(nbS,nbL,learn,nbInit)
-        lv += h.log_vraissemblance(test)
+            lv += h.log_vraissemblance(test)
         if lv > lvOpt:
             lvOpt = lv
             nbSOpt = nbS
@@ -77,11 +77,12 @@ for i in range(10):
 print(mots(S))
 """
 
+"""
 S_anglais = sequence_langue('anglais2000')
 S_allemand = sequence_langue('allemand2000')
 S_espagnol = sequence_langue('espagnol2000')
 S_neerland = sequence_langue('neerland2000')
-
+"""
 
 """
 nbs_anglais = xval(5, S_anglais, 26, 20, 100, 10)
@@ -94,7 +95,7 @@ nbs_neerland = xval(5, S_neerland, 26, 20, 100, 10)
 print(nbs_neerland)
 """
 
-
+"""
 HMM_anglais = HMM.HMM.BW4_mieux(30, 26, S_anglais, 10)
 print('anglais')
 HMM_anglais.save('HMM_anglais')
@@ -110,4 +111,47 @@ HMM_espagnol.save('HMM_espagnol')
 HMM_neerland = HMM.HMM.BW4_mieux(30, 26, S_neerland, 10)
 print('neerland')
 HMM_neerland.save('HMM_neerland')
+"""
+
+
+HMM_anglais = HMM.HMM.load('HMM_anglais')
+HMM_allemand = HMM.HMM.load('HMM_allemand')
+HMM_espagnol = HMM.HMM.load('HMM_espagnol')
+HMM_neerland = HMM.HMM.load('HMM_neerland')
+
+
+S = []
+for i in range(10):
+    w = HMM_anglais.gen_rand(3 + i % 5)[1]
+    S += [w]
+print(mots(S))
+
+S = []
+for j in range(10):
+    w = HMM_allemand.gen_rand(3 + j %5)[1]
+    S += [w]
+print(mots(S))
+
+S = []
+for k in range(10):
+    w = HMM_espagnol.gen_rand(3 + k % 5)[1]
+    S += [w]
+print(mots(S))
+
+S = []
+for l in range(10):
+    w = HMM_neerland.gen_rand(3 + l % 5)[1]
+    S += [w]
+print(mots(S))
+
+
+
+mot = 'five'
+w = sequence([mot])[0]
+HMMs = [HMM_neerland, HMM_allemand, HMM_espagnol, HMM_anglais]
+logps = []
+for M in HMMs:
+    logp = M.log_vraissemblance([w])
+    logps += [logp]
+print(logps)
 
