@@ -90,7 +90,7 @@ print("Nous obtenons un HMM que nous stockons dans le fichier 'HMM_anglais_V1'."
 HMM_anglais1.save('HMM_anglais_V1')
 print("Nous avons mis à jour notre HMM " + str(it) + " fois avant d'obtenir des HMMs avec des vraisemblances stables")
 print("Intéressons-nous à la log-vraisemblance de notre séquence de mots anglais dans ce HMM:")
-logV_anglais1 = HMM_anglais1.log_vraissemblance(S_anglais)
+logV_anglais1 = HMM_anglais1.log_vraisemblance(S_anglais)
 print(logV_anglais1, "\n\n")
 print("Cela nous permet de générer des mots potentiellement anglais :")
 S = []
@@ -184,6 +184,6 @@ langue_prob('das')
 print("\n'miljoen' est un mot néerlandais, on obtient: ", end='')
 langue_prob('miljoen')
 
-print("\nCe modèle a des limites: 'los' est un mot espagnol, mais on obtient", end='')
+print("\nCe modèle a des limites: 'los' est un mot espagnol, mais on obtient: ", end='')
 langue_prob('los')
-print("Car c'est aussi un mot néerlandais")
+print("Car c'est aussi un mot anglais, et aussi néerlandais")
