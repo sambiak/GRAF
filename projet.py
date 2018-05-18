@@ -79,25 +79,35 @@ def mots_langue(M):
 
 print("Bienvenue dans ce programme de présentation de la classe HMM", "\n")
 print("Réalisée par le groupe GRAF", "\n\n")
+
 print("Nous allons voir une application des HMM pour reconnnaître une langue et en générer des mots", "\n\n")
 print("Commençons par récupérer une séquence de mots, les plus courants de la langue anglaise, que vous pouvez voir dan"
       "s le fichier 'anglais2000'", "\n\n")
+
 S_anglais = sequence_langue('anglais2000')
+
 print("Générons un HMM au hasard et adaptons-le à la génération des mots de cette séquence.")
 print("Nous avons choisi de générer un HMM avec 30 états.", "\n\n")
+
 HMM_anglais1, it = HMM.HMM.BW2_mieux(30, 26, S_anglais)
+
 print("Nous obtenons un HMM que nous stockons dans le fichier 'HMM_anglais_V1'.", "\n\n")
+
 HMM_anglais1.save('HMM_anglais_V1')
+
 print("Nous avons mis à jour notre HMM " + str(it) + " fois avant d'obtenir des HMMs avec des vraisemblances stables")
 print("Intéressons-nous à la log-vraisemblance de notre séquence de mots anglais dans ce HMM:")
+
 logV_anglais1 = HMM_anglais1.log_vraisemblance(S_anglais)
 print(logV_anglais1, "\n\n")
+
 print("Cela nous permet de générer des mots potentiellement anglais :")
 S = []
 for i in range(10):
     w = HMM_anglais1.gen_rand(5)[1]
     S += [w]
 print(mots(S))
+
 
 print("\n\nPour déterminer le nombre d'états optimal pour notre HMM, nous avons exécuté le script suivant:")
 
@@ -178,8 +188,8 @@ langue_prob('five')
 print("\n'hablar' est un mot espagnol, on obtient: ", end='')
 langue_prob('hablar')
 
-print("\n'das' est un mot allemand, on obtient: ", end='')
-langue_prob('das')
+print("\n'achtung' est un mot allemand, on obtient: ", end='')
+langue_prob('achtung')
 
 print("\n'miljoen' est un mot néerlandais, on obtient: ", end='')
 langue_prob('miljoen')
