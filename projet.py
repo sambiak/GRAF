@@ -84,7 +84,7 @@ def mots_langue(M):
 
 
 print("Bienvenue dans ce programme de présentation de la classe HMM", "\n")
-print("Réalisée par le groupe GRAF", "\n\n")
+print("Réalisée par le groupe GRAF (Guillaume Augustoni, Rania Alili, Albane Durand-Viel, François Oder)", "\n\n")
 
 print("Nous allons voir une application des HMM pour reconnnaître une langue et en générer des mots", "\n\n")
 print("Commençons par récupérer une séquence de mots, les plus courants de la langue anglaise, que vous pouvez voir dan"
