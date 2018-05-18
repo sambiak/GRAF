@@ -1,8 +1,14 @@
-#
-# Le projet en lui-même
-#
-# Il présente tout
-#
+#######################
+# Guillaume Augustoni #
+#    Rania Alili      #
+# Albane Durand-Viel  #
+#   François Oder     #
+#     projet.py       #
+#  présentation des   #
+# fonctionnalités de  #
+#    la classe HMM    #
+#######################
+
 
 import numpy as np
 import HMM_classe as HMM

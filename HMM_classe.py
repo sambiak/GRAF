@@ -1,3 +1,14 @@
+#######################
+# Guillaume Augustoni #
+#    Rania Alili      #
+# Albane Durand-Viel  #
+#   François Oder     #
+#    HMM_classe.py    #
+# les fonctionnalités #
+#  de la classe HMM   #
+#######################
+
+
 import numpy as np
 import random as rd
 
